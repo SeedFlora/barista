@@ -1,0 +1,52 @@
+@startuml activity_kalkulator
+' Diagram aktivitas: menghitung takaran dan mencatat produksi
+' (sumber: SPEC.md §6, §8 POST /calculator/scale & /calculator/produce, §9 Kalkulator Takaran;
+'  frontend CalculatorView.vue, ProduceDialog.vue; backend services/inventory.record_production)
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+|Pengguna|
+start
+repeat
+  :Memilih resep dan mengisi
+  variasi pesanan (ukuran,
+  penyajian, cangkir, kemanisan,
+  tambahan <i>shot</i>, ganti susu/biji,
+  dosis) pada Kalkulator Takaran;
+  |Sistem|
+  if (Pesanan valid?) then (ya)
+    :Menghitung takaran per cangkir
+    dan total bahan, memeriksa
+    batasan praktis dan stok
+    (POST /api/calculator/scale);
+    :Menampilkan hasil, peringatan,
+    dan saran pasangan menu;
+  else (tidak)
+    :Menampilkan
+    pesan galat;
+  endif
+  |Pengguna|
+repeat while (Ubah pesanan?) is (ya) not (tidak)
+:Menekan "Catat Produksi" dan
+meninjau daftar pengurangan stok;
+if (Konfirmasi?) then (batal)
+  stop
+else (ya)
+endif
+|Sistem|
+if (client_uuid sudah
+tercatat?) then (tidak)
+  :Menyimpan log produksi
+  dan mutasi pemakaian
+  setiap bahan (POST
+  /api/calculator/produce);
+else (ya)
+  :Mengembalikan
+  produksi tersimpan;
+endif
+:Menampilkan produksi
+dan saldo stok terbaru;
+stop
+@enduml

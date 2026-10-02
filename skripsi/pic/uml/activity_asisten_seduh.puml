@@ -1,0 +1,46 @@
+@startuml activity_asisten_seduh
+' Diagram aktivitas: konsultasi koreksi seduh dengan sistem pakar
+' (sumber: SPEC.md §7.4, §8 POST /ai/brew-diagnosis, §9 Asisten Seduh; backend ai/expert.diagnose,
+'  routers/ai.brew_diagnosis; frontend BrewAssistantView.vue)
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+|Pengguna|
+start
+repeat
+  :Mengisi form Asisten Seduh:
+  metode (<i>pour over</i>/espreso),
+  resep pembanding (opsional),
+  dosis, massa air atau minuman,
+  TDS, waktu, suhu, dan rasa;
+  |Sistem|
+  if (Masukan valid?) then (ya)
+    :Menetapkan standar resep dan
+    menurunkan fakta: rasio seduh,
+    massa minuman, EY
+    (POST /api/ai/brew-diagnosis);
+    while (Ada aturan cocok yang\nbelum ditembakkan?) is (ya)
+      :Menembakkan aturan
+      berprioritas tertinggi dan
+      menambahkan kesimpulannya;
+    endwhile (tidak)
+    :Menyusun zona bagan kontrol,
+    diagnosis, dan rekomendasi,
+    lalu menyimpan log seduh;
+    :Menampilkan metrik, bagan
+    kontrol, rekomendasi, serta
+    aturan terpicu dan sumbernya;
+    |Pengguna|
+    :Menerapkan koreksi
+    pada seduhan berikutnya;
+  else (tidak)
+    |Sistem|
+    :Menampilkan
+    pesan galat;
+  endif
+  |Pengguna|
+repeat while (Perlu konsultasi\nlagi?) is (ya) not (tidak)
+stop
+@enduml

@@ -1,0 +1,56 @@
+@startuml alur_penskalaan
+' Diagram alir algoritma penskalaan berbasis batasan (sumber: SPEC.md §6; backend/app/services/scaling.py:
+'  _validate_ranges, _resolve_context, _scale_factor, _independent_target, _discrete_quantity,
+'  _constraint_quantities, practical_round, _steps, _explode, _totals, _constraint_warnings, compute_scale).
+' Notasi: q = kuantitas dasar komponen (ukuran dasar, per cangkir), q' = hasil, t = target sebelum pembulatan,
+' f = faktor skala, V = volume cangkir, V0 = volume ukuran dasar, n = jumlah cangkir, s = kemanisan (%),
+' e = tambahan shot, r = nilai rasio. Pembulatan: setengah ke atas ke presisi takar, tidak pernah menjadi 0.
+' Catatan sintaks: titik koma mengakhiri teks aktivitas, jadi di dalam kotak dipakai koma.
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+skinparam NoteFontSize 10
+
+start
+:Masukan: resep dan pesanan (ukuran, penyajian, n,
+s, e, penggantian susu/biji, dosis d);
+note right
+  Pesanan tidak valid (n, s, e, d di luar
+  rentang, ukuran/penyajian tidak ada,
+  resep nonaktif) ditolak dengan galat.
+end note
+if (Mode dosis? (ada komponen\ndosis dan d diisi)) then (tidak)
+  :f = V / V<sub>0</sub>;
+else (ya)
+  :d' = d dibulatkan,
+  f = d' / dosis dasar,
+  V = V<sub>0</sub> · f;
+endif
+:Saring komponen menurut penyajian dan terapkan
+penggantian dalam grup (susu/biji);
+partition "<i>Pass</i> A: aturan independen" {
+  :t = q · f (aturan tetap: t = q),
+  komponen pemanis: t = t · s/100;
+  if (Aturan diskret?) then (tidak)
+    :q' = t dibulatkan ke
+    presisi takar;
+  else (ya)
+    :q' = <i>override</i> ukuran bila ada, selain itu
+    max(step, bulat(t / step) · step), lalu
+    penerima <i>shot</i> tambahan: q' = q' + e · step;
+  endif
+}
+:<b><i>Pass</i> B</b> rasio: q' = q'(acuan) · r, dibulatkan.
+<b><i>Pass</i> C</b> isi (<i>top up</i>): q' = max(0, V − Σ volume
+komponen lain) ÷ ekspansi susu (es: 0,917 g/ml),
+dibulatkan;
+:Skalakan target tuang langkah × f, jabarkan
+sub-resep ke bahan (unit × BOM) per cangkir,
+total bahan = per cangkir × n;
+:Periksa batasan (luapan > 1,05 V, kurang isi,
+penyimpangan rasio > 0,2, dosis di luar rentang,
+stok tidak cukup), kembalikan hasil beserta
+daftar peringatan;
+stop
+@enduml

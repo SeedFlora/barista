@@ -1,0 +1,94 @@
+' Gaya bersama diagram skripsi Takar (ramah cetak hitam-putih).
+' Dipanggil dengan: !include _style.iuml
+' Ukuran huruf dalam satuan PlantUML (px pada 96 dpi); gambar dirender 300 dpi.
+!pragma layout smetana
+
+skinparam dpi 300
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam defaultFontColor black
+skinparam roundCorner 8
+skinparam ArrowColor #222222
+skinparam ArrowThickness 1
+skinparam ArrowFontSize 11
+skinparam ArrowFontColor #111111
+skinparam NoteBackgroundColor #F7F7F7
+skinparam NoteBorderColor #555555
+skinparam NoteFontSize 11
+skinparam LegendBackgroundColor #FFFFFF
+skinparam LegendBorderColor #555555
+skinparam LegendFontSize 11
+
+' komponen, paket, simpul
+skinparam ComponentBackgroundColor #FFFFFF
+skinparam ComponentBorderColor #222222
+skinparam ComponentStyle rectangle
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleBorderColor #222222
+skinparam PackageBackgroundColor #F4F4F4
+skinparam PackageBorderColor #444444
+skinparam PackageFontStyle bold
+skinparam NodeBackgroundColor #FAFAFA
+skinparam NodeBorderColor #222222
+skinparam DatabaseBackgroundColor #EDEDED
+skinparam DatabaseBorderColor #222222
+skinparam FolderBackgroundColor #F4F4F4
+skinparam FolderBorderColor #444444
+skinparam FileBackgroundColor #FFFFFF
+skinparam FileBorderColor #444444
+skinparam CloudBackgroundColor #FFFFFF
+skinparam CloudBorderColor #444444
+skinparam ArtifactBackgroundColor #FFFFFF
+skinparam ArtifactBorderColor #444444
+
+' use case
+skinparam ActorBorderColor #222222
+skinparam ActorBackgroundColor #FFFFFF
+skinparam UsecaseBackgroundColor #FFFFFF
+skinparam UsecaseBorderColor #222222
+
+' aktivitas
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #222222
+skinparam ActivityDiamondBackgroundColor #F2F2F2
+skinparam ActivityDiamondBorderColor #222222
+skinparam ActivityStartColor #111111
+skinparam ActivityEndColor #111111
+skinparam ActivityBarColor #111111
+skinparam SwimlaneBorderColor #444444
+skinparam SwimlaneTitleFontStyle bold
+skinparam SwimlaneTitleFontSize 13
+skinparam PartitionBorderColor #666666
+skinparam PartitionBackgroundColor #FAFAFA
+<style>
+activityDiagram {
+  activity {
+    Padding 6
+  }
+}
+</style>
+
+' sekuens
+skinparam SequenceLifeLineBorderColor #666666
+skinparam SequenceLifeLineBackgroundColor #EDEDED
+skinparam SequenceParticipantBackgroundColor #F2F2F2
+skinparam SequenceParticipantBorderColor #222222
+skinparam SequenceActorBorderColor #222222
+skinparam SequenceActorBackgroundColor #FFFFFF
+skinparam SequenceGroupBorderColor #555555
+skinparam SequenceGroupBackgroundColor #EFEFEF
+skinparam SequenceGroupHeaderFontStyle bold
+skinparam SequenceBoxBorderColor #777777
+skinparam SequenceDividerBackgroundColor #F2F2F2
+
+' kelas / entitas (ERD)
+skinparam ClassBackgroundColor #FFFFFF
+skinparam ClassBorderColor #222222
+skinparam ClassHeaderBackgroundColor #E6E6E6
+skinparam ClassAttributeIconSize 0
+skinparam ClassFontStyle bold
+skinparam EntityBackgroundColor #FFFFFF
+skinparam EntityBorderColor #222222
+skinparam StereotypeFontSize 10

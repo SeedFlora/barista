@@ -1,0 +1,50 @@
+@startuml activity_panduan_seduh
+' Diagram aktivitas: panduan seduh terpandu V60
+' (sumber: arahan pembimbing, resep V60; SPEC.md §5 resep 5, §6 mode dosis, §9 Panduan Seduh;
+'  seed recipes.json V60_POUR_OVER; frontend GuidedBrewView.vue, lib/brewGuide.js)
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+|Pengguna|
+start
+:Membuka Panduan Seduh,
+memilih resep V60, dan
+mengatur dosis kopi;
+|Sistem|
+:Menghitung f = dosis / 15 g,
+air = dosis × 15, dan target
+tuang kumulatif 45/130/225 ml × f
+(POST /api/calculator/scale);
+|Pengguna|
+:Menyiapkan gilingan <i>medium-fine</i>
+dan air 90–92 °C, lalu
+menekan "Mulai";
+|Sistem|
+repeat
+  :Menampilkan langkah aktif
+  (<i>blooming</i>, tuang 1, tuang 2,
+  <i>drawdown</i>), target kumulatif,
+  dan hitung mundur;
+  |Pengguna|
+  :Menuang air hingga target
+  sesuai langkah aktif;
+  |Sistem|
+repeat while (Masih ada langkah? (maju\notomatis pada 1:00, 1:30, 2:30)) is (ya) not (tidak)
+|Pengguna|
+:Menekan "Selesai" saat
+tetesan berakhir;
+|Sistem|
+:Membandingkan waktu total
+dengan rentang 2:30–3:00
+dan menampilkan statusnya;
+if (Melewati waktu\ntarget?) then (ya)
+  |Pengguna|
+  :Meminta saran koreksi
+  di Asisten Seduh;
+else (tidak)
+endif
+|Pengguna|
+stop
+@enduml

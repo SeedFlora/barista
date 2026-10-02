@@ -1,0 +1,46 @@
+@startuml activity_sop
+' Diagram aktivitas: menjalankan checklist SOP
+' (sumber: SPEC.md §8 GET /sop/{id}, POST /sop/{id}/runs, PATCH /sop/runs/{run_id}, §9 SOP;
+'  backend routers/sop.py; frontend SopDetailView.vue, SopRunView.vue)
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+|Pengguna|
+start
+:Membuka halaman SOP
+dan memilih dokumen;
+|Sistem|
+:Menampilkan langkah SOP,
+langkah kritis ditandai
+(GET /api/sop/{id});
+|Pengguna|
+:Memulai <i>checklist</i> baru
+atau melanjutkan <i>checklist</i>
+yang belum selesai;
+|Sistem|
+:Membuat catatan <i>checklist</i>
+(POST /api/sop/{id}/runs)
+atau memuat yang ada;
+|Pengguna|
+repeat
+  repeat
+    :Mengerjakan satu langkah
+    lalu mencentangnya;
+    |Sistem|
+    :Menyimpan centang otomatis
+    (PATCH /api/sop/runs/{id});
+    |Pengguna|
+  repeat while (Masih ada\nlangkah?) is (ya) not (tidak)
+  :Menekan "Selesaikan";
+  |Sistem|
+backward :Menampilkan
+langkah kritis
+yang kurang;
+repeat while (Ada langkah kritis\nbelum dicentang?) is (ya) not (tidak)
+:Menandai <i>checklist</i> selesai
+dan mengunci perubahan;
+|Pengguna|
+stop
+@enduml

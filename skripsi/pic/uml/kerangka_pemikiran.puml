@@ -1,0 +1,149 @@
+@startuml kerangka_pemikiran
+' Kerangka pemikiran (sumber: arahan pembimbing - latar belakang, rumusan masalah, batasan, metodologi;
+'  SPEC.md pendahuluan (masalah 1-4, R1-R3), §6, §7, §10, §11; tools/PANDUAN_PENULISAN.md §2 RM1-RM4, H1-H4).
+' P1-P3 = tiga kendala yang disebut arahan; P4 = kebutuhan yang diturunkan penulis dari rumusan masalah
+'  arahan tentang kalkulator resep dinamis (bukan kendala yang disebut arahan).
+' Kode dalam kurung menunjukkan keterkaitan: P = masalah atau kebutuhan, O = peluang, S = komponen solusi,
+' RM = rumusan masalah, H = hipotesis. Diagram aktivitas dipakai hanya sebagai sarana tata letak baris.
+!include _style.iuml
+' padding kotak sedikit dikurangi agar lima kotak per baris muat pada lebar teks (14,5 cm) tanpa huruf terlalu kecil
+<style>
+activityDiagram {
+  activity {
+    Padding 4
+  }
+}
+</style>
+skinparam ActivityFontSize 11
+skinparam PartitionFontSize 12
+skinparam PartitionFontStyle bold
+skinparam ArrowThickness 1
+
+partition "1. Masalah dan kebutuhan dari arahan serta peluang" {
+split
+  :<b>P1</b> Takaran
+  resep tidak
+  konsisten
+  antar-<i>shift</i>;
+split again
+  :<b>P2</b> Pelatihan
+  barista baru
+  memakan
+  waktu lama;
+split again
+  :<b>P3</b> Inventaris
+  bahan baku
+  belum
+  terintegrasi;
+split again
+  :<b>P4</b> Kebutuhan
+  bahan variasi
+  pesanan
+  dihitung manual;
+split again
+  :<b>O1</b> Peluang:
+  data transaksi
+  penjualan
+  dapat diolah;
+end split
+}
+partition "2. Solusi: aplikasi web Takar (FastAPI + Vue.js)" {
+split
+  :<b>S1</b> Resep
+  standar dan
+  SOP digital
+  (P1);
+split again
+  :<b>S2</b> Panduan
+  seduh terpandu
+  dan daftar
+  periksa SOP (P2);
+split again
+  :<b>S3</b> Buku besar
+  stok yang
+  terhubung ke
+  produksi (P3);
+split again
+  :<b>S4</b> Kalkulator
+  takaran
+  dinamis
+  (P4);
+split again
+  :<b>S5</b> Modul AI:
+  pasangan menu (O1),
+  <i>restock</i> (O1, P3),
+  koreksi seduh (P2);
+end split
+}
+partition "3. Metode" {
+split
+  :Agile/Scrum
+  (iterasi <i>Sprint</i>)
+  untuk S1–S5;
+split again
+  :Penskalaan
+  berbasis
+  batasan (S4);
+split again
+  :FP-Growth,
+  aturan
+  asosiasi (S5);
+split again
+  :Peramalan dan
+  kebijakan
+  persediaan (S5);
+split again
+  :Sistem pakar
+  <i>forward</i>
+  <i>chaining</i> (S5);
+end split
+}
+partition "4. Evaluasi" {
+split
+  :Pengujian
+  <i>black-box</i>
+  (RM1, RM4);
+split again
+  :Evaluasi algoritma
+  pada data sampel
+  fiktif dan data
+  nyata (RM2, RM3,
+  H1–H4);
+split again
+  :Pengujian
+  kinerja
+  (RM4);
+split again
+  :UAT dengan
+  kuesioner SUS
+  (RM4);
+end split
+}
+partition "5. Hasil yang diharapkan" {
+split
+  :Resep, SOP, dan
+  inventaris
+  terintegrasi
+  (RM1);
+  detach
+split again
+  :Takaran variasi
+  pesanan sesuai
+  batasan praktis
+  (RM2);
+  detach
+split again
+  :Kinerja AI
+  terukur pada
+  data fiktif dan
+  nyata (RM3);
+  detach
+split again
+  :Kelayakan
+  fungsi, kinerja,
+  dan penerimaan
+  (RM4);
+  detach
+end split
+}
+@enduml

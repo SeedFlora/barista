@@ -1,0 +1,40 @@
+@startuml sequence_produce
+' Diagram sekuens POST /api/calculator/produce, idempoten terhadap client_uuid
+' (sumber: SPEC.md §4, §8; backend routers/calculator.produce, services/inventory.record_production &
+'  post_movement; frontend components/calculator/ProduceDialog.vue)
+!include _style.iuml
+skinparam maxMessageSize 160
+skinparam ParticipantFontSize 11
+skinparam ArrowFontSize 11
+skinparam SequenceGroupHeaderFontSize 11
+skinparam NoteFontSize 10
+hide footbox
+
+actor "Pengguna" as U
+participant "SPA\nVue.js" as SPA
+participant "Router\ncalculator" as R
+participant "Layanan\ninventaris" as INV
+database "SQLite" as DB
+
+U -> SPA : Catat Produksi,\nlalu konfirmasi
+SPA -> R : POST /api/calculator/\nproduce {OrderSpec,\nclient_uuid baru}
+R -> R : verifikasi JWT\n(gagal: 401)
+R -> INV : record_production()
+INV -> DB : cari log dengan\nclient_uuid sama
+alt sudah tercatat
+  INV -> DB : ambil mutasi\n"production:{id}"
+  INV --> R : created = false
+  R --> SPA : 200 OK (log lama,\nstok tidak berubah)
+else baru
+  INV -> INV : scale_order():\nhitung ulang takaran
+  INV -> DB : INSERT\nproduction_logs
+  loop tiap bahan
+    INV -> DB : UPDATE stok (−q)\nRETURNING saldo
+    INV -> DB : INSERT mutasi\n(usage, −q, saldo)
+  end
+  INV --> R : created = true
+  R -> DB : COMMIT
+  R --> SPA : 201 Created (log,\nmutasi, peringatan)
+end
+SPA --> U : saldo stok terbaru
+@enduml

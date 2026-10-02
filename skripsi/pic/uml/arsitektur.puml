@@ -1,0 +1,89 @@
+@startuml arsitektur
+' Arsitektur sistem Takar (sumber: SPEC.md §1, §3, §7, §11; backend/app/main.py; frontend/src)
+!include _style.iuml
+skinparam nodesep 16
+skinparam ranksep 22
+
+package "Peramban web (tablet / ponsel / PC)" as dev {
+  component spa [
+    **Vue.js SPA**
+    ----
+    Views + Vue Router (guard peran)
+    Pinia stores (auth: token JWT, ui)
+    API client (axios, header Bearer JWT)
+  ]
+}
+
+package "<i>Backend</i> FastAPI (Uvicorn)" as api {
+  component "Routers /api/*" as routers
+  component "Keamanan\n(JWT, RBAC, Argon2)" as sec
+  component svc [
+    **Layanan inti**
+    ----
+    Penskalaan berbasis batasan
+    Inventaris (buku besar stok)
+  ]
+  component ai [
+    **Modul AI**
+    ----
+    Pasangan menu (FP-Growth)
+    Peramalan permintaan
+    Rekomendasi <i>restock</i>
+    Sistem pakar koreksi seduh
+  ]
+  component chat [
+    **Asisten AI hibrida**
+    ----
+    Perutean alat berbasis aturan
+    Pencarian BM25 dan konteks RAG
+    Penjaga cakupan dan angka
+    Keluaran dengan sumber / mode
+  ]
+  component "SQLAlchemy ORM" as orm
+}
+
+database "SQLite\n(19 tabel)" as db
+cloud "Ollama lokal\n(Gemma, jika tersedia)" as ollama
+
+file ds [
+  <b><i>Dataset</i> publik</b>
+  ----
+  Data sampel fiktif:
+  IBM, Maven
+  ----
+  Data nyata: Bread Basket,
+  ihelon, UC Davis/Cotter,
+  Batali 2020, Starbucks
+]
+
+package "Skrip luring" as scripts {
+  component "Impor <i>dataset</i>" as imp
+  component "Latih model" as train
+  component "Evaluasi algoritma" as eval
+}
+
+folder "Hasil evaluasi\n(JSON, CSV, PNG)" as res
+
+spa --> routers : HTTP/JSON REST\n(Bearer JWT)
+routers -right-> sec
+routers --> svc
+routers --> ai
+routers --> chat
+ai -left-> svc : penjabaran\nBOM
+chat --> svc : alat baca: takaran,\nstok, pasangan, diagnosis
+chat --> ollama : permintaan model\nberbatas waktu
+svc --> orm
+ai --> orm
+chat --> orm : korpus & log
+orm --> db : SQL
+
+imp -[hidden]down- train
+train -[hidden]down- eval
+imp -left-> db
+train -left-> db
+ds -left-> imp : IBM,\nMaven
+ds -left-> eval
+eval -left-> res
+res .up.> train : parameter\nterpilih
+res .up.> ai : dibaca
+@enduml

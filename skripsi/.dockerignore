@@ -1,0 +1,12 @@
+# Build context hanya naskah dan dependensi kompilasinya.
+**
+!*.tex
+!*.sty
+!*.bib
+!.latexmkrc
+!pic/
+!pic/**
+!tools/
+!tools/build-docker.sh
+!Dockerfile
+!.dockerignore

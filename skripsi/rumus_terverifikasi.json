@@ -1,0 +1,978 @@
+{
+ "meta": {
+  "dibuat": "2026-09-30",
+  "proyek": "Skripsi Takar - aplikasi web manajemen resep dan standardisasi operasional kedai kopi (FastAPI + Vue.js) dengan rekomendasi AI",
+  "tujuan": "Daftar persamaan yang boleh dipakai di skripsi (PANDUAN_PENULISAN.md 0.6 dan 3). Hanya entri 'confirmed' yang boleh dicetak sebagai persamaan bernomor; kunci sitasi hanya dari referensi_terverifikasi.json.",
+  "struktur": {
+   "confirmed": "Rumus yang didukung sumber di pool dan dibuka langsung. evidence_snippet = kutipan verbatim (persamaan ditulis linear bila sumbernya MathML/PDF; '[...]' = lompatan teks; '[hlm. x]' = penanda halaman; superskrip = nomor rujukan sumber). evidence_form menandai apakah rumus tercetak sebagai persamaan atau hanya definisi verbal. additional_evidence = sumber pendamping yang juga dibuka.",
+   "rejected": "Bentuk/atribusi yang TIDAK boleh dipakai beserta alasannya.",
+   "missing": "Rumus tanpa sumber di pool yang dapat dibuka; bila ada sumber di luar pool yang mendukung, buktinya dicatat di candidate_evidence dan metadatanya di candidate_sources (belum ditambahkan ke pool).",
+   "candidate_sources": "Usulan sumber baru dengan DOI yang diverifikasi di Crossref; TIDAK ditambahkan ke referensi_terverifikasi.json."
+  },
+  "aturan_sitasi": "BINUS: 1-5 penulis \\citet*{}/\\citep*{}; >= 6 penulis \\citet{}/\\citep{} (tercetak 'dkk.'); tanpa \\cite{} dan tanpa 'et al.' manual. Field 'cite' pada tiap entri sudah diperiksa terhadap jumlah penulis di pool.",
+  "metode": "Setiap sumber dibuka pada 2026-09-30: teks lengkap Europe PMC (JATS XML), PDF penerbit/penulis, halaman HTML buku terbuka (OTexts, Pressbooks), atau PDF ACM/ScienceDirect/bit-Tech lewat sesi peramban Playwright. Kutipan prosa diperiksa ulang secara otomatis terhadap teks hasil ekstraksi (build_rumus.py, pencocokan substring setelah normalisasi spasi, tanda kutip, dan pemenggalan kata); kutipan dari PDF pindaian atau gambar (ACM 1993-2000, Geng & Hamilton Tabel IV, Friedman 2001, Efron 1979, FPP3 Tabel 8.6, Gardner 2006 Tabel 1, Sihombing dkk. Pers. 1-3, Taufiq dkk. Pers. 1-3, Feistel & Wagner 2006, DiCiccio & Efron 1996, Ge dkk. 2010) diketik ulang dari gambar halaman dan diperiksa visual.",
+  "implementasi_dicek": "Kesesuaian rumus dengan kode Takar diperiksa (bukan sumber sitasi): mlxtend 0.25 association_rules.py (confidence, lift, leverage, conviction), statsmodels 0.15 tsa/holtwinters/_exponential_smoothers.pyx (Holt-Winters aditif teredam), backend app/ai/pairing.py (HR@K, P@K, MRR@K, cakupan katalog, bootstrap persentil), app/ai/forecasting.py (naive, seasonal naive, MA-7, MAE, RMSE, WAPE, MASE, bias = mean(y-hat - y)), app/ai/restock.py dan scripts/evaluate_restock.py (SS, ROP, S, fill rate). Perbedaan dicatat di notes entri terkait (terutama tanda bias F30 dan akar(L) vs akar(L+R) F09/F11).",
+  "sumber_pool_tidak_terbuka": "efron1994introduction (bab persentil tidak dapat diakses), silver2016inventory (buku berbayar), gisslen2025professional (hanya daftar isi), lewis2018system (Taylor & Francis tertutup), apiletti2020correlating (MDPI menolak unduhan skrip; tidak diperlukan), azzahra2025forecasting (IEEE; tidak diperlukan).",
+  "ringkasan": {
+   "confirmed": 30,
+   "rejected": 5,
+   "missing": 2,
+   "candidate_sources": 3
+  }
+ },
+ "confirmed": [
+  {
+   "id": "F01",
+   "group": "kopi",
+   "concept": "Rasio seduh (brew ratio) = massa air seduh dibagi massa kopi bubuk",
+   "requested_form": "R = M_w / M_g",
+   "latex": "R_{\\mathrm{brew}} = \\frac{M_w}{M_g}",
+   "variables": "R_brew: rasio seduh, tak berdimensi (gram air per gram kopi). M_w: massa air seduh yang dituangkan (g). M_g: massa kopi bubuk (dosis, g). Contoh resep V60 pada dokumen arahan: 15 g kopi dan 225 ml air (\"1:15\") memberi R_brew = 225/15 = 15, dengan asumsi 1 ml air setara 1 g.",
+   "original_attribution": "-",
+   "recent_source_key": "liang2021equilibrium",
+   "cite": "\\citep*{liang2021equilibrium}; pendamping \\citep{guinard2023new}",
+   "evidence_form": "persamaan tercetak (Pers. 1)",
+   "location_in_source": "Bagian Theory, subbagian 'Definition sketch for full immersion brewing', Pers. (1) (Scientific Reports 11, artikel 6904; teks lengkap Europe PMC PMC7994670)",
+   "evidence_snippet": "Initially, a known mass of coffee grounds ( M_g ) and a known mass of hot water ( M_w ) is added to the brewer. The ratio of these masses is defined as the brew ratio, R_brew = M_w / M_g. (1)",
+   "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7994670/fullTextXML",
+   "additional_evidence": [
+    {
+     "source_key": "guinard2023new",
+     "location_in_source": "Bagian 1 Introduction, hlm. 2169 (J. Food Sci. 88(5):2168-2177)",
+     "evidence_snippet": "These quantities are linked via the conservation of mass to the brew ratio Rbrew = mw / mg of water to coffee grounds, following the relationship: [...] Note that brew ratio is often expressed in terms of the mass of coffee grounds per mass of water, or less precisely in terms of the mass of coffee grounds per volume of water, which necessitates assumptions about the density of the water.",
+     "url_opened": "https://pages.uoregon.edu/chendon/coffee_literature/coffee_lit_rev/2024_ep14_brew_control_chart_lance_hedrick.pdf"
+    },
+    {
+     "source_key": "sca2022home",
+     "location_in_source": "Bagian 04 'Terms and Definitions', hlm. 5 PDF (SCA Standard 310-2021)",
+     "evidence_snippet": "Brew ratio. The ratio of coffee to water when preparing a brew. In this standard, brew ratio is expressed in grams of coffee per 1.000 kg of fresh water at 17±3°C (g/kg). The brew ratio used for testing in this standard is 55 g of coffee per 1.000 kg of fresh water unless stated otherwise.",
+     "url_opened": "https://coffeegeek.com/wp-content/uploads/2023/10/SCAGoldCupStandard.pdf"
+    }
+   ],
+   "notes": "Dua orientasi sama-sama tercetak di sumber: Liang dkk. (2021) dan Guinard dkk. (2023) memakai air/kopi (R_brew = M_w/M_g, mis. 15), sedangkan SCA 310-2021 memakai kopi per air (g kopi per kg air; standar 55 g/kg). Resep arahan '1:15' (kopi:air) setara R_brew = 15. Skripsi harus menyebut orientasi secara eksplisit dan konsisten dengan kalkulator (SPEC 5: air V60 = 15 x dosis). Konversi ml ke g mengandaikan massa jenis air kira-kira 1 g/ml; Guinard dkk. menyebut rasio per volume air 'less precisely' karena butuh asumsi massa jenis. Persamaan Liang ditranskripsikan dari MathML Europe PMC ke bentuk linear. Guinard dibaca dari salinan PDF unduhan Wiley (footer Wiley, OA CC BY-NC-ND 4.0) yang dihosting pages.uoregon.edu karena situs Wiley menolak unduhan skrip. Sitasi BINUS: Liang (3 penulis) memakai \\citep*, Guinard (6 penulis) memakai \\citep.",
+   "label_saran": "eq:rasio-seduh"
+  },
+  {
+   "id": "F02",
+   "group": "kopi",
+   "concept": "Kekuatan seduhan (TDS) sebagai fraksi massa padatan kopi terlarut dalam cairan seduhan",
+   "requested_form": "TDS = massa padatan terlarut / massa seduhan (fraksi massa)",
+   "latex": "\\mathrm{TDS} = \\frac{M_d}{M_L}",
+   "variables": "TDS: total dissolved solids, fraksi massa padatan kopi terlarut (biasa dilaporkan dalam persen, TDS x 100%). M_d: massa padatan kopi yang terlarut dalam cairan (g). M_L: massa cairan seduhan yang mengandung padatan tersebut (g); pada model imersi Liang dkk. M_L = M_w + M_d (Pers. 10).",
+   "original_attribution": "Lockhart (1957), The Soluble Solids in Beverage Coffee as an Index to Cup Quality, Coffee Brewing Institute - dirujuk Batali dkk. (2020) dan Guinard dkk. (2023); tidak ada di pool.",
+   "recent_source_key": "liang2021equilibrium",
+   "cite": "\\citep*{liang2021equilibrium,batali2020brew}",
+   "evidence_form": "persamaan tercetak (Pers. 3b dan 10) + definisi verbal (Batali dkk.)",
+   "location_in_source": "Bagian Theory, subbagian 'Equilibrium desorption model', Pers. (3b) beserta kalimat sesudahnya dan Pers. (10) (Scientific Reports 11:6904; PMC7994670)",
+   "evidence_snippet": "For simplicity in relating theory to experimental observations, both mass concentrations are per unit mass of liquid, M_L , such that C_A = M_A / M_L , (3a) C_D = M_D / M_L . (3b) By this definition, C_D is equivalent to the TDS. [...] Note that M_L is not known a priori but it is readily related to the mass of water added and the mass of dissolved coffee species present in the brew, M_L = M_w + M_d . (10)",
+   "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7994670/fullTextXML",
+   "additional_evidence": [
+    {
+     "source_key": "batali2020brew",
+     "location_in_source": "Introduction, paragraf pertama (Scientific Reports 10:16450; PMC7536440)",
+     "evidence_snippet": "Seminal work by Lockhart in 1957² related the quality of brewed coffee to two key metrics: the \"brew strength,\" which is the mass fraction of soluble solids in the brew (commonly characterized as the total dissolved solids, or TDS), and the \"extraction yield,\" which is the mass fraction of soluble solids removed from the coffee grounds (commonly referred to as the percent extraction, or PE).",
+     "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7536440/fullTextXML"
+    },
+    {
+     "source_key": "sca2022home",
+     "location_in_source": "Bagian 04 'Terms and Definitions', hlm. 5 PDF",
+     "evidence_snippet": "Brew strength. The amount of total dissolved solids (TDS) in the brew, expressed in percentage or in parts per million, and usually estimated using a coffee refractometer.",
+     "url_opened": "https://coffeegeek.com/wp-content/uploads/2023/10/SCAGoldCupStandard.pdf"
+    }
+   ],
+   "notes": "Liang dkk. menulis M_D pada Pers. (3b) dan M_d pada Pers. (10) dan (13) untuk besaran yang sama (massa padatan terlarut); skripsi cukup memakai satu simbol M_d. M_L adalah massa cairan (air + padatan terlarut), bukan massa air saja. Superskrip '2' pada kutipan Batali adalah nomor rujukan (Lockhart, 1957). TDS diukur tidak langsung dengan refraktometer (SCA 310-2021).",
+   "label_saran": "eq:tds"
+  },
+  {
+   "id": "F03",
+   "group": "kopi",
+   "concept": "Rendemen ekstraksi (extraction yield / percent extraction) dari TDS, massa minuman, dan dosis kopi",
+   "requested_form": "EY = TDS x M_beverage / M_dose",
+   "latex": "\\mathrm{EY} = \\mathrm{TDS} \\times \\frac{M_{\\mathrm{bev}}}{M_{\\mathrm{dose}}}",
+   "variables": "EY: rendemen ekstraksi (fraksi atau %; disebut juga percent extraction, PE). TDS: fraksi massa padatan terlarut minuman (F02). M_bev: massa minuman yang dihasilkan (g; 'M_brew' pada Batali dkk., 'Yield' pada Moroney dkk.). M_dose: massa kopi bubuk (g; 'M_grounds' atau 'Dose').",
+   "original_attribution": "Ristenpart & Kuhl (2017), The Design of Coffee: An Engineering Approach - rujukan [3] Batali dkk. (2020); tidak ada di pool.",
+   "recent_source_key": "batali2020brew",
+   "cite": "\\citep*{batali2020brew}; untuk espreso \\citep{moroney2019analysing}",
+   "evidence_form": "persamaan tercetak (Pers. 1)",
+   "location_in_source": "Materials and methods, subbagian 'Physical measurements of coffee samples', Pers. (1) (Scientific Reports 10:16450; PMC7536440)",
+   "evidence_snippet": "The total delivered mass of the brewed coffee was measured after each brew, and the percent extraction was calculated³ as: PE = TDS × M_brew / M_grounds . (1)",
+   "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7536440/fullTextXML",
+   "additional_evidence": [
+    {
+     "source_key": "moroney2019analysing",
+     "location_in_source": "Introduction, Pers. (1) (PLOS ONE 14(7):e0219906; PMC6668809)",
+     "evidence_snippet": "Baristas can now measure the extraction yield percentage through careful weighing of the mass of coffee used to make the espresso (the dose) and the mass of the espresso produced (the yield). [...] A digital refractometer is used to measure the TDS in the espresso liquid. The extraction percentage can then be worked out by the following equation: (Yield × TDS) / Dose = Extraction yield, (1)",
+     "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6668809/fullTextXML"
+    },
+    {
+     "source_key": "sca2022home",
+     "location_in_source": "Bagian 04 'Terms and Definitions', hlm. 5 PDF",
+     "evidence_snippet": "Brew yield (percent extraction). This is defined as the percentage in mass of the fresh coffee grounds which is extracted into the brew after the cycle is completed.",
+     "url_opened": "https://coffeegeek.com/wp-content/uploads/2023/10/SCAGoldCupStandard.pdf"
+    }
+   ],
+   "notes": "Sama dengan rumus sistem pakar di SPEC 7.4 (EY % = TDS % x beverage_g / dose_g). Rumus hanya menghitung padatan yang terbawa dalam minuman; padatan terlarut di cairan yang tertahan pada ampas tidak terhitung (lihat F04). Bila TDS dalam persen, EY juga dalam persen. Superskrip '3' pada kutipan Batali adalah nomor rujukan. Moroney dkk. memiliki 6 penulis sehingga memakai \\citep tanpa bintang.",
+   "label_saran": "eq:ey"
+  },
+  {
+   "id": "F04",
+   "group": "kopi",
+   "concept": "Neraca massa PE-TDS-rasio seduh dengan koreksi air yang tertahan di ampas (absorption/liquid retention ratio)",
+   "requested_form": "PE = TDS/(1-TDS) x (R_brew - R_abs)",
+   "latex": "\\mathrm{PE} = \\frac{\\mathrm{TDS}}{1 - \\mathrm{TDS}}\\left(R_{\\mathrm{brew}} - R_{\\mathrm{abs}}\\right), \\qquad R_{\\mathrm{abs}} \\approx 2{,}1",
+   "variables": "PE: percent extraction (rendemen ekstraksi, fraksi). TDS: fraksi massa padatan terlarut (F02). R_brew = m_w/m_g: rasio seduh air terhadap kopi (F01). R_abs: absorption ratio atau liquid retention ratio, massa air yang tertahan di ampas basah per massa kopi (sekitar 2,1).",
+   "original_attribution": "Ristenpart & Kuhl (2021) (tidak di pool) dan Liang dkk. (2021) (liang2021equilibrium), sebagaimana dirujuk Guinard dkk. (2023).",
+   "recent_source_key": "guinard2023new",
+   "cite": "\\citep{guinard2023new}",
+   "evidence_form": "persamaan tercetak (tanpa nomor)",
+   "location_in_source": "Bagian 1 Introduction, hlm. 2169 (J. Food Sci. 88(5):2168-2177)",
+   "evidence_snippet": "These quantities are linked via the conservation of mass to the brew ratio Rbrew = mw / mg of water to coffee grounds, following the relationship: PE = TDS/(1 − TDS) (Rbrew − Rabs), where Rabs ≈2.1 is the \"absorption ratio\" or \"liquid retention ratio\" of water retained in the spent moist grounds (Ristenpart & Kuhl, 2021; Liang et al., 2021).",
+   "url_opened": "https://pages.uoregon.edu/chendon/coffee_literature/coffee_lit_rev/2024_ep14_brew_control_chart_lance_hedrick.pdf",
+   "additional_evidence": [
+    {
+     "source_key": "liang2021equilibrium",
+     "location_in_source": "Bagian Theory, subbagian 'Extraction yield at equilibrium', Pers. (16)-(17); bagian Results (rasio retensi)",
+     "evidence_snippet": "Specifically, from Eqs. (3b) and (10) the mass of dissolved solids is related to the TDS as, M_d = TDS/(1 − TDS) M_w , (16) and substitution into Eq. (13) yields E = TDS/(1 − TDS) R_brew . (17) [...] this brew ratio is less than the average retention ratio of 2.48±0.19 calculated from Eq. (24)",
+     "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7994670/fullTextXML"
+    }
+   ],
+   "notes": "Dengan R_abs = 0 persamaan menjadi Pers. (17) Liang dkk. (imersi penuh; seluruh cairan dihitung). Nilai R_abs bergantung metode: Guinard dkk. memakai kira-kira 2,1, sedangkan Liang dkk. mengukur rasio retensi rata-rata 2,48 ± 0,19 pada seduhan imersi yang disaring. Asumsi SPEC 7.4 'massa minuman = air - 2 x dosis' setara R_abs = 2 (asumsi penulis; sebut sebagai pendekatan dengan rujukan ke Guinard dkk.). Perhitungan penulis (turunan, bukan kutipan): untuk resep V60 arahan (R_brew = 15) dengan R_abs = 2,1, PE 18-22% setara TDS sekitar 1,38-1,68%. Persamaan di PDF ditulis sebagai pecahan; di sini ditulis linear.",
+   "label_saran": "eq:neraca-massa"
+  },
+  {
+   "id": "F05",
+   "group": "kopi",
+   "concept": "Rasio seduh espreso (brew ratio, BR) = massa kopi dalam puck dibagi massa espreso di cangkir",
+   "requested_form": "espresso brew ratio = beverage mass / dose (DIBALIK di sumber; lihat R01)",
+   "latex": "\\mathrm{BR} = \\frac{m_{\\mathrm{kopi}}}{m_{\\mathrm{espreso}}}",
+   "variables": "BR: rasio seduh espreso (tak berdimensi). m_kopi: massa kopi bubuk dalam puck/portafilter = dosis (g). m_espreso: massa espreso yang terekstraksi ke cangkir (g). Ristretto BR 1/1, espreso BR 1/2, lungo BR 1/3 (mis. puck 20 g dengan 40 g espreso = BR 1/2).",
+   "original_attribution": "-",
+   "recent_source_key": "schmieder2023influence",
+   "cite": "\\citep*{schmieder2023influence}; konvensi dosis-hasil \\citep{moroney2019analysing}",
+   "evidence_form": "definisi verbal + nilai BR dan perhitungan massa di Bagian 2.8.2",
+   "location_in_source": "Bagian 1 Introduction (paragraf kedua dan paragraf penutup) serta subbagian 2.8.2 'Calculation of Component Mass in EC Cup' (Foods 12(15):2871; PMC10418593)",
+   "evidence_snippet": "The ratio between the ground coffee mass in the puck and the extracted EC mass in the cup is called the brew ratio (BR). [...] for Ristretto (BR 1/1), Espresso (BR 1/2), and Espresso Lungo (BR 1/3). [...] Thus, beverage masses of 20 g, 40 g, and 60 g were chosen for the calculation to match the coffee puck mass of 20 ± 0.01 g and achieve the brew ratios of BR 1/1, BR 1/2, and BR 1/3.",
+   "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10418593/fullTextXML",
+   "additional_evidence": [
+    {
+     "source_key": "moroney2019analysing",
+     "location_in_source": "Introduction (PMC6668809)",
+     "evidence_snippet": "Brewing recipes are thus typically given in terms of weight in (dose) and weight out (yield) (e.g. 18 g in –36 g out) along with the recommended shot time (the time it takes water to pass through the coffee bed).",
+     "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6668809/fullTextXML"
+    }
+   ],
+   "notes": "Bentuk yang diminta (massa minuman / dosis) adalah KEBALIKAN definisi sumber: Schmieder dkk. mendefinisikan BR = massa kopi / massa espreso (1/2 untuk espreso); lihat rejected R01. Tidak ada sumber pool yang dibuka yang mencetak 'brew ratio = massa minuman / dosis' untuk espreso. Rekomendasi: tulis rasio espreso sebagai 'dosis : hasil = 1 : 2' (sesuai BR = 1/2), atau bila kalkulator menyimpan hasil/dosis = 2, sebut besaran itu 'rasio hasil (1/BR)' sebagai konvensi penulis. Orientasi ini juga berlawanan dengan F01 (air/kopi), jadi jangan mencampur simbol R_brew dan BR.",
+   "label_saran": "eq:rasio-espreso"
+  },
+  {
+   "id": "F06",
+   "group": "penskalaan_resep",
+   "concept": "Faktor konversi resep = hasil (yield) yang dibutuhkan dibagi hasil resep asal",
+   "requested_form": "recipe conversion factor = desired yield / original yield",
+   "latex": "f = \\frac{Y_{\\mathrm{butuh}}}{Y_{\\mathrm{resep}}}, \\qquad Y = n_{\\mathrm{porsi}} \\times s_{\\mathrm{porsi}}",
+   "variables": "f: faktor konversi (>1 memperbesar, <1 memperkecil). Y_butuh: hasil yang dibutuhkan. Y_resep: hasil resep asal. Bila jumlah dan ukuran porsi sama-sama berubah, hasil total dihitung sebagai Y = n_porsi x s_porsi (jumlah porsi x ukuran porsi) untuk resep asal maupun resep baru.",
+   "original_attribution": "-",
+   "recent_source_key": "bccook2015basic",
+   "cite": "\\citep*{bccook2015basic}",
+   "evidence_form": "persamaan dalam kalimat (tanpa nomor) + langkah prosedur",
+   "location_in_source": "Bab 6 'Converting and Adjusting Recipes and Formulas' (bagian Trade Math), subbagian 'Finding Conversion Factors' (buku terbuka Pressbooks BCcampus, CC BY 4.0, tanpa nomor halaman)",
+   "evidence_snippet": "Obtain the conversion factor by dividing the required yield (from Step 2) by the old yield (from Step 1). That is, conversion factor = (required yield)/(recipe yield) or conversion factor = what you NEED ÷ what you HAVE. [...] Determine the total yield of the recipe by multiplying the number of portions and the size of each portion. Determine the required yield of the recipe by multiplying the new number of portions and the new size of each portion. Find the conversion factor by dividing the required yield (Step 2) by the recipe yield (Step 1).",
+   "url_opened": "https://opentextbc.ca/basickitchenandfoodservicemanagement/chapter/convert-and-adjust-recipes-and-formulas/",
+   "additional_evidence": [],
+   "notes": "Pemetaan ke SPEC 6: f = cup_ml / base_cup_ml (ukuran porsi) dan total = per cangkir x cups; mode dosis V60: f = dose_g / base_dose. Contoh 6 di sumber tidak konsisten (teks menyebut '60 portions', perhitungan '40 portions x 120 g per portion = 4800 g') - jangan disalin sebagai contoh. gisslen2025professional (pool) memuat subbab 'Converting Recipes', tetapi hanya daftar isinya yang dapat dibuka sehingga tidak dipakai sebagai bukti rumus.",
+   "label_saran": "eq:faktor-konversi"
+  },
+  {
+   "id": "F07",
+   "group": "penskalaan_resep",
+   "concept": "Takaran bahan baru = takaran bahan asal x faktor konversi (penskalaan linier)",
+   "requested_form": "new quantity = old quantity x conversion factor",
+   "latex": "q_i^{\\mathrm{baru}} = f \\times q_i^{\\mathrm{asal}}",
+   "variables": "q_i^asal: takaran bahan ke-i pada resep asal (sebaiknya dalam satuan berat). f: faktor konversi (F06). q_i^baru: takaran bahan ke-i setelah konversi.",
+   "original_attribution": "-",
+   "recent_source_key": "bccook2015basic",
+   "cite": "\\citep*{bccook2015basic}",
+   "evidence_form": "definisi verbal + tabel contoh (Tabel 14 dan 16: Original Amount x Conversion factor = New Ingredient Amount)",
+   "location_in_source": "Bab 6, subbagian 'Adjusting Recipes Using Conversion Factors' dan 'Cautions when Converting Recipes'",
+   "evidence_snippet": "Now that you have the conversion factor, you can use it to adjust all the ingredients in the recipe. The procedure is to multiply the amount of each ingredient in the original recipe by the conversion factor. Before you begin, there is an important first step: Before converting a recipe, express the original ingredients by weight whenever possible. [...] However, a major exception is measuring liquids with a high sugar content, such as honey and syrup; these should always be measured by weight, not volume. [...] Spices and seasonings must be increased with caution as doubling or tripling the amount to satisfy a conversion factor can have negative consequences. [...] The fine adjustments that have to be made when converting a recipe can only be learned from experience, as there are no hard and fast rules.",
+   "url_opened": "https://opentextbc.ca/basickitchenandfoodservicemanagement/chapter/convert-and-adjust-recipes-and-formulas/",
+   "additional_evidence": [],
+   "notes": "Ini adalah baseline naive_scale di SPEC 6 (semua takaran x f x cups tanpa pembulatan/batasan). Kalimat 'Cautions' menjadi dasar teoretis perlunya aturan berbatasan (shot utuh, isi hingga penuh, pembulatan ke presisi takar); aturan berbatasan itu rancangan penulis, bukan dari sumber. Persamaan simbolik ditulis penulis dari kalimat prosedur (sumber tidak memberi persamaan bernomor).",
+   "label_saran": "eq:skala-linier"
+  },
+  {
+   "id": "F09",
+   "group": "persediaan",
+   "concept": "Stok pengaman (safety stock) = Z x simpangan baku permintaan selama lead time, dengan σ_L = σ_d √L",
+   "requested_form": "SS = z x sigma_d x sqrt(L)",
+   "latex": "\\mathrm{SS} = Z \\times \\sigma_L = Z\\,\\sigma_d\\sqrt{L}",
+   "variables": "SS: stok pengaman (satuan bahan). Z: nilai distribusi normal baku sesuai tingkat layanan (mis. 1,65 untuk 95%). σ_d: simpangan baku permintaan (atau galat ramalan) harian. σ_L: simpangan baku permintaan selama lead time. L: lead time (hari).",
+   "original_attribution": "Silver, Pyke & Peterson (1998) - dirujuk Yigit & Esnaf (2023); tidak di pool (silver2016inventory edisi ke-4 ada di pool tetapi isinya tidak dapat dibuka).",
+   "recent_source_key": "taufiq2025implementation",
+   "cite": "\\citep*{taufiq2025implementation}; pendamping \\citep*{yigit2023novel}",
+   "evidence_form": "persamaan tercetak (Pers. 1-2) + contoh hitung",
+   "location_in_source": "Bagian 3.5 'Metode Analisis Sistem' butir a 'Metode Safety Stock', Pers. (1)-(2), hlm. 2729; contoh hitung di Bagian 4.3 'Pembahasan', hlm. 2734 (SISTEMASI 14(6):2724-2737)",
+   "evidence_snippet": "Proses ini dihitung menggunakan Persamaan (1),(2), yang dirancang untuk menentukan jumlah safety stock berdasarkan standar deviasi kebutuhan harian dan waktu tunggu pemesanan, dijelaskan dengan rumus dibawah ini. σL = σd x √L (1) Keterangan: σd : Standar deviasi dari Tingkat kebutuhan (unit) L : Lead Time (Waktu tunggu pemesanan) Selanjutnya menghitung safety stock berdasarkan Z-Score untuk menghitung hasil cadangan persediaan yang dijelaskan pada Persamaan (2) berikut. Safety Stock = Z x σL (2) [...] [hlm. 2734] σL = σd × √L = 1,2 × √4= 1,2 × 2 = 2,4 [...] Safety Stock = Z × σL = 1,65 × 2,4 = 3,96 ≈ 4 kg",
+   "url_opened": "https://sistemasi.ftik.unisi.ac.id/index.php/stmsi/article/download/5541/1086",
+   "additional_evidence": [
+    {
+     "source_key": "yigit2023novel",
+     "location_in_source": "Bagian 3, hlm. 511-512, Pers. (1)-(3) (IJIETAP 30(2):506-521)",
+     "evidence_snippet": "rpx covers the total period of the review period and lead time of the product x (Silver, Pyke and Peterson, 1998). drpx = dtx * rpx (1) σrpx = σx * √rpx . (2) [...] The common assumption used for the calculation of safety stock is that these errors have a normal distribution with no bias (that is, the average value of the error is zero) and a known standard deviation (σrpx) for a period of rp (Silver et al., 1998). [...] ssx = kx * σrpx , (3)",
+     "url_opened": "https://ijietap.com/index.php/ijie/article/download/8035/1343"
+    }
+   ],
+   "notes": "Keterangan Pers. (2) di Taufiq dkk. salah susun (σ diberi arti 'Nilai dari distribusi normal standar ...' dan L diberi arti 'Simpangan baku ... selama lead time'); makna yang benar: Z = nilai normal baku sesuai tingkat layanan (contoh sumber: 95%, Z = 1,65), σ_L = simpangan baku permintaan selama lead time. Taufiq dkk. menyatakan σ_d sebagai simpangan baku kebutuhan harian; SPEC 7.3 memakai simpangan baku galat ramalan harian tingkat bahan dari backtest - sejalan dengan asumsi Yigit & Esnaf bahwa galat ramalan berdistribusi normal tanpa bias. Pada kebijakan order-up-to (R,S), Yigit & Esnaf memakai periode risiko rp = R + L (σ √(R+L)); SPEC memakai √L untuk ROP maupun S (evaluate_restock.py melaporkan sensitivitas √(L+R)) - sebutkan sebagai penyederhanaan. Tanda kali 'x' pada kutipan Taufiq adalah huruf x di sumber.",
+   "label_saran": "eq:safety-stock"
+  },
+  {
+   "id": "F10",
+   "group": "persediaan",
+   "concept": "Titik pemesanan ulang (reorder point) = stok pengaman + lead time x rata-rata pemakaian",
+   "requested_form": "ROP = expected demand over lead time + SS",
+   "latex": "\\mathrm{ROP} = \\mathrm{SS} + L \\times \\bar{d}",
+   "variables": "ROP: titik pesan ulang (satuan bahan). SS: stok pengaman (F09). L: lead time (hari). d̄: rata-rata pemakaian bahan per hari (dilambangkan Q oleh Taufiq dkk.).",
+   "original_attribution": "Silver, Pyke & Peterson (1998) - lihat F09; tidak di pool.",
+   "recent_source_key": "taufiq2025implementation",
+   "cite": "\\citep*{taufiq2025implementation}",
+   "evidence_form": "persamaan tercetak (Pers. 3) + contoh hitung",
+   "location_in_source": "Bagian 3.5 butir b 'Metode ROP (Reorder Point)', Pers. (3), hlm. 2729-2730; contoh hitung hlm. 2734",
+   "evidence_snippet": "Nilai Reorder Point (ROP) dihitung dengan menjumlahkan safety stock dan hasil perkalian antara lead time dan rata-rata pemakaian bahan baku, sebagaimana ditunjukkan pada Persamaan (3). ROP = safety stock + (leadtime × Q) (3) [hlm. 2730] Keterangan: ROP : Reorder point (Unit) Leadtime : 7 hari Q : Pemakaian rata-rata bahan baku per m [...] [hlm. 2734] ROP = (5 × 4) + 4 = 20 + 4 = 24 kg",
+   "url_opened": "https://sistemasi.ftik.unisi.ac.id/index.php/stmsi/article/download/5541/1086",
+   "additional_evidence": [
+    {
+     "source_key": "yigit2023novel",
+     "location_in_source": "Bagian 3, Pers. (1), hlm. 511",
+     "evidence_snippet": "Eq. (1) and Eq. (2) represent the mean and standard deviation of demand during the risk period (rp). [...] drpx = dtx * rpx (1)",
+     "url_opened": "https://ijietap.com/index.php/ijie/article/download/8035/1343"
+    }
+   ],
+   "notes": "Legenda Pers. (3) memuat 'Leadtime : 7 hari' dan 'per m' (terpotong), sedangkan contoh hitung memakai L = 4 hari; pakai simbol, bukan angka legenda. SPEC 7.3 memakai ROP = D(L) + SS dengan D(L) = jumlah ramalan permintaan bahan selama L hari; untuk permintaan rata-rata konstan D(L) = d̄ x L (bentuk sumber). Penggantian d̄ x L dengan jumlah ramalan adalah rancangan penulis - tandai 'dirumuskan penulis berdasarkan Taufiq dkk. (2025)'. Pada simulasi, kebijakan (b) 'static ROP' memakai μ x L + SS (bentuk sumber).",
+   "label_saran": "eq:rop"
+  },
+  {
+   "id": "F11",
+   "group": "persediaan",
+   "concept": "Tingkat order-up-to S pada peninjauan periodik (R, S) = permintaan rata-rata selama periode risiko (R + L) + stok pengaman; pesanan menaikkan persediaan kembali ke S",
+   "requested_form": "order-up-to level S dan Q = S - inventory position (periodic review)",
+   "latex": "S = \\bar{d}\\,(R + L) + \\mathrm{SS}, \\qquad Q = S - \\mathrm{IP}",
+   "variables": "S: tingkat order-up-to. d̄: rata-rata permintaan per periode. R: periode peninjauan (hari). L: lead time (hari); R + L = periode risiko (risk period). SS: stok pengaman untuk periode risiko. Q: kuantitas pesanan saat peninjauan. IP: posisi persediaan saat peninjauan (stok di tangan + pesanan dalam perjalanan).",
+   "original_attribution": "Silver, Pyke & Peterson (1998) - dirujuk Yigit & Esnaf (2023); tidak di pool.",
+   "recent_source_key": "yigit2023novel",
+   "cite": "\\citep*{yigit2023novel}; pendamping \\citep*{goltsos2022inventory,bu2023asymptotic}",
+   "evidence_form": "persamaan tercetak untuk S (Pers. 1 dan 4); Q = S - IP hanya dinyatakan verbal",
+   "location_in_source": "Bagian 3 'Model Formulation of the Proposed Models', hlm. 509-512 (IJIETAP 30(2):506-521): asumsi model hlm. 509-510, Pers. (1) hlm. 511, Pers. (4) hlm. 512",
+   "evidence_snippet": "The inventory model is a periodic review and Order Up-to Level (R, S) model. Order up to level is calculated based on mean demand during the risk period. [...] rp covers lead time and review period. It is denoted as a risk period. [...] The initial stock level is raised to the order level at the beginning of the risk period. [...] drpx = dtx * rpx (1) [...] Total stock (TS) at the beginning of the risk period equals the total safety stock and order quantity. Eq. (4) represents the calculation of TS. TSx = ssx + drpx . (4)",
+   "url_opened": "https://ijietap.com/index.php/ijie/article/download/8035/1343",
+   "additional_evidence": [
+    {
+     "source_key": "goltsos2022inventory",
+     "location_in_source": "Lampiran B.3 'Integration level 2', hlm. 414 (EJOR 299(2):397-419)",
+     "evidence_snippet": "[...] by simulating a periodic (review period T) order-up-to (level S), (T, S) policy, with various forecasting methods as input.",
+     "url_opened": "https://www.sciencedirect.com/science/article/pii/S0377221721006500 (PDF 'View PDF' diunduh dalam sesi peramban; artikel OA CC BY)"
+    },
+    {
+     "source_key": "bu2023asymptotic",
+     "location_in_source": "Abstrak (Management Science 69(2):846-864)",
+     "evidence_snippet": "Hence, various heuristic replenishment policies are proposed in the literature, including the base-stock policy, which raises the total inventory level to a constant in each review period.",
+     "url_opened": "https://api.crossref.org/works/10.1287/mnsc.2022.4400"
+    }
+   ],
+   "notes": "Q = S - IP tidak dicetak sebagai persamaan di sumber yang dibuka; ia bentuk simbolik langsung dari 'The initial stock level is raised to the order level' (Yigit & Esnaf) dan 'raises the total inventory level to a constant in each review period' (Bu dkk.). Istilah 'inventory position' tidak muncul pada kutipan tersebut; ia dipakai simulasi (evaluate_restock.py: 'IP = inventory position = on hand + in transit', pesanan S_t - IP). Rekomendasi aktual di restock.plan memakai stok di tangan (stock_qty) serta max(0, .) dan pembulatan ke kemasan - sebut sebagai rancangan penulis. SPEC: S = D(L+R) + SS dengan D(.) = jumlah ramalan; ini generalisasi d̄ (R+L) (dirumuskan penulis). Pada kalimat Pers. (4), Yigit & Esnaf menyebut d_rp sebagai 'order quantity'.",
+   "label_saran": "eq:order-up-to"
+  },
+  {
+   "id": "F12",
+   "group": "persediaan",
+   "concept": "Fill rate = persentase permintaan yang dilayani langsung dari stok di tangan",
+   "requested_form": "fill rate = demand satisfied from stock / total demand",
+   "latex": "\\mathrm{FR} = \\frac{\\sum_{t} D_t^{\\mathrm{terlayani}}}{\\sum_{t} D_t} \\times 100\\%",
+   "variables": "FR: fill rate (%). D_t: permintaan pada hari t. D_t^terlayani: bagian permintaan hari t yang dipenuhi langsung dari stok di tangan (pada simulasi lost sales: min(D_t, stok tersedia)).",
+   "original_attribution": "Syntetos & Boylan (2006), sebagaimana diringkas Goltsos dkk. (2022); tidak di pool.",
+   "recent_source_key": "goltsos2022inventory",
+   "cite": "\\citep*{goltsos2022inventory}",
+   "evidence_form": "definisi verbal",
+   "location_in_source": "Lampiran B.3 'Integration level 2', hlm. 414 (EJOR 299(2):397-419)",
+   "evidence_snippet": "Syntetos and Boylan (2006), for example, investigate the inventory performance (holding cost and fill rate – the percentage of demand served directly from stock on hand) by simulating a periodic (review period T) order-up-to (level S), (T, S) policy, with various forecasting methods as input.",
+   "url_opened": "https://www.sciencedirect.com/science/article/pii/S0377221721006500 (PDF 'View PDF' diunduh dalam sesi peramban; artikel OA CC BY)",
+   "additional_evidence": [],
+   "notes": "Definisi verbal; notasi simbolik ditulis penulis. Implementasi: evaluate_restock.py menghitung 'fill rate (served / demand)' dengan permintaan tak terpenuhi hilang (lost sales); min(D_t, stok) adalah formalisasi penulis untuk simulasi tersebut.",
+   "label_saran": "eq:fill-rate"
+  },
+  {
+   "id": "F13",
+   "group": "aturan_asosiasi",
+   "concept": "Support itemset = proporsi transaksi yang memuat seluruh item dalam itemset",
+   "requested_form": "support(X) = |{T in D : X subset of T}| / |D|",
+   "latex": "\\mathrm{support}(X) = \\frac{\\left|\\{\\, T \\in D : X \\subseteq T \\,\\}\\right|}{|D|}",
+   "variables": "D: basis data transaksi (keranjang); |D| = jumlah transaksi. T: satu transaksi (himpunan item). X: itemset. Pembilang: banyaknya transaksi yang memuat semua item X. Support aturan X → Y adalah support(X ∪ Y).",
+   "original_attribution": "Agrawal dkk. (1993) (agrawal1993mining); Brin dkk. (1997) (brin1997dynamic)",
+   "recent_source_key": "sihombing2026analisis",
+   "cite": "\\citep*{agrawal1993mining,brin1997dynamic}; konteks kedai kopi \\citep*{sihombing2026analisis}",
+   "evidence_form": "persamaan tercetak (bentuk cacah n/N untuk aturan) + definisi verbal itemset",
+   "location_in_source": "Bagian 2 'Metode Penelitian', Persamaan (1), hlm. 57 (JIKTI 3(2):52-63)",
+   "evidence_snippet": "Persamaan (1) Support Support(X → Y) = n(X ∩ Y) / N dengan: - Support(X → Y) = nilai support aturan asosiasi - n(X ∩ Y) = jumlah transaksi yang mengandung item X dan Y secara bersamaan - N = jumlah seluruh transaksi",
+   "url_opened": "https://journal.stmiki.ac.id/index.php/jikti/article/download/1960/1332",
+   "additional_evidence": [
+    {
+     "source_key": "brin1997dynamic",
+     "location_in_source": "Bagian 1 (Introduction), hlm. 255 (SIGMOD '97, pp. 255-264); diperiksa visual dari PDF pindaian ACM",
+     "evidence_snippet": "One very common formalization of this problem is finding association rules which are based on support and confidence. The support of an itemset (a set of items), I, is the fraction of transactions the itemset occurs in (is a subset of).",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/253260.253325"
+    },
+    {
+     "source_key": "agrawal1993mining",
+     "location_in_source": "Bagian 2 'Formal Model', butir 'Support Constraints', hlm. 208; diperiksa visual",
+     "evidence_snippet": "Support Constraints: These constraints concern the number of transactions in T that support a rule. The support for a rule is defined to be the fraction of transactions in T that satisfy the union of items in the consequent and antecedent of the rule.",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/170035.170072"
+    },
+    {
+     "source_key": "han2000mining",
+     "location_in_source": "Bagian 2 'Frequent Pattern Tree: Design and Construction', hlm. 2 + catatan kaki 1; diperiksa visual",
+     "evidence_snippet": "Let I = {a1, a2, ..., am} be a set of items, and a transaction database DB = ⟨T1, T2, ..., Tn⟩, where Ti (i ∈ [1..n]) is a transaction which contains a set of items in I. The support¹ (or occurrence frequency) of a pattern A, which is a set of items, is the number of transactions containing A in DB. [...] ¹Notice that support is defined here as absolute occurrence frequency, not the relative one as in some literature.",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/342009.335372"
+    }
+   ],
+   "notes": "Notasi himpunan pada latex adalah penulisan simbolik langsung dari definisi Brin dkk. ('fraction of transactions the itemset occurs in (is a subset of)'); notasi D dan T mengikuti Han dkk. (DB, T_i). Notasi n(X ∩ Y) di Sihombing dkk. berarti 'jumlah transaksi yang mengandung X dan Y' (irisan kejadian), setara cacah transaksi yang memuat itemset X ∪ Y - jangan ditafsirkan sebagai irisan itemset. Han dkk. memakai support absolut (cacah), sedangkan mlxtend dan skripsi memakai support relatif (proporsi). Sihombing dkk. memakai dataset Bread Basket yang sama dengan validasi eksternal E1. Teks Brin, Agrawal, dan Han berasal dari PDF pindaian ACM sehingga kutipan diketik ulang dari gambar halaman.",
+   "label_saran": "eq:support"
+  },
+  {
+   "id": "F14",
+   "group": "aturan_asosiasi",
+   "concept": "Confidence aturan X → Y = support(X ∪ Y) / support(X)",
+   "requested_form": "confidence(X->Y) = support(X u Y) / support(X)",
+   "latex": "\\mathrm{confidence}(X \\rightarrow Y) = \\frac{\\mathrm{support}(X \\cup Y)}{\\mathrm{support}(X)}",
+   "variables": "X: antecedent; Y: consequent (X dan Y saling lepas). support(.): F13. Bentuk cacah: n(X dan Y) / n(X), yaitu jumlah transaksi yang memuat X dan Y dibagi jumlah transaksi yang memuat X.",
+   "original_attribution": "Agrawal dkk. (1993) (agrawal1993mining)",
+   "recent_source_key": "sihombing2026analisis",
+   "cite": "\\citep*{agrawal1993mining,brin1997dynamic}; \\citep*{sihombing2026analisis}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bagian 2 'Metode Penelitian', Persamaan (2), hlm. 57",
+   "evidence_snippet": "Persamaan (2) Confidence Confidence(X → Y) = n(X ∩ Y) / n(X) dengan: - Confidence(X → Y) = nilai confidence aturan asosiasi - n(X ∩ Y) = jumlah transaksi yang mengandung X dan Y - n(X) = jumlah transaksi yang mengandung X",
+   "url_opened": "https://journal.stmiki.ac.id/index.php/jikti/article/download/1960/1332",
+   "additional_evidence": [
+    {
+     "source_key": "brin1997dynamic",
+     "location_in_source": "Bagian 4 'Implication rules', hlm. 260; diperiksa visual",
+     "evidence_snippet": "Let {A, B} be an itemset. Then the support is P({A, B}) which we write P(A, B). [...] The confidence of A ⇒ B is P(B | A), the conditional probability of B given A, which is equal to P(A, B)/P(A). It has the flaw that it ignores P(B).",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/253260.253325"
+    },
+    {
+     "source_key": "agrawal1993mining",
+     "location_in_source": "Bagian 2 'Formal Model', subproblem 2, hlm. 208; diperiksa visual",
+     "evidence_snippet": "To generate a rule X ⟹ Ij | c, where X = I1I2 . . . Ij−1Ij+1 . . . Ik, take the support of Y and divide it by the support of X. If the ratio is greater than c then the rule is satisfied with the confidence factor c; otherwise it is not.",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/170035.170072"
+    },
+    {
+     "source_key": "raschka2018mlxtend",
+     "location_in_source": "Dokumentasi mlxtend, User Guide 'association_rules', bagian Metrics (bukan artikel JOSS)",
+     "evidence_snippet": "confidence(A→C) = support(A→C) / support(A), range: [0, 1] introduced in [3]",
+     "url_opened": "https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/"
+    }
+   ],
+   "notes": "Pada Agrawal dkk., Y adalah itemset besar (large itemset) yang merupakan gabungan antecedent X dan item konsekuen, sehingga 'support of Y / support of X' = support(X ∪ Y)/support(X). Bentuk cacah Sihombing dkk. setara karena N saling menghapus. Brin dkk. mencatat kelemahan confidence (mengabaikan P(B)) - dasar penggunaan lift.",
+   "label_saran": "eq:confidence"
+  },
+  {
+   "id": "F15",
+   "group": "aturan_asosiasi",
+   "concept": "Lift (interest) aturan X → Y = confidence(X → Y) / support(Y)",
+   "requested_form": "lift(X->Y) = confidence(X->Y) / support(Y)",
+   "latex": "\\mathrm{lift}(X \\rightarrow Y) = \\frac{\\mathrm{confidence}(X \\rightarrow Y)}{\\mathrm{support}(Y)} = \\frac{\\mathrm{support}(X \\cup Y)}{\\mathrm{support}(X)\\,\\mathrm{support}(Y)}",
+   "variables": "lift = 1: X dan Y saling bebas; lift > 1: asosiasi positif; lift < 1: asosiasi negatif. support dan confidence: F13-F14.",
+   "original_attribution": "Brin dkk. (1997) dengan nama 'interest' (brin1997dynamic)",
+   "recent_source_key": "sihombing2026analisis",
+   "cite": "\\citep*{brin1997dynamic}; \\citep*{sihombing2026analisis}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bagian 2 'Metode Penelitian', Persamaan (3), hlm. 57",
+   "evidence_snippet": "Persamaan (3) Lift Lift(X → Y) = Confidence(X → Y) / Support(Y) dengan: - Lift(X → Y) = nilai lift aturan asosiasi - Confidence(X → Y) = nilai confidence aturan Support(Y) = nilai support item Y",
+   "url_opened": "https://journal.stmiki.ac.id/index.php/jikti/article/download/1960/1332",
+   "additional_evidence": [
+    {
+     "source_key": "brin1997dynamic",
+     "location_in_source": "Bagian 4 'Implication rules', hlm. 260; diperiksa visual",
+     "evidence_snippet": "The interest of A, B is defined as P(A, B)/P(A)P(B) and factors in both P(A) and P(B); essentially it is a measure of departure from independence. However, it only measures co-occurrence not implication, in that it is completely symmetric.",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/253260.253325"
+    },
+    {
+     "source_key": "geng2006interestingness",
+     "location_in_source": "Tabel IV 'Probability Based Objective Interestingness Measures for Rules', hlm. 9; diperiksa visual",
+     "evidence_snippet": "Lift/Interest | P(B|A)/P(B) or P(AB)/P(A)P(B)",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/1132960.1132963"
+    },
+    {
+     "source_key": "raschka2018mlxtend",
+     "location_in_source": "Dokumentasi mlxtend, User Guide 'association_rules', bagian Metrics",
+     "evidence_snippet": "lift(A→C) = confidence(A→C) / support(C), range: [0, ∞] introduced in [4] [...] If A and C are independent, the Lift score will be exactly 1.",
+     "url_opened": "https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/"
+    }
+   ],
+   "notes": "Kesamaan kedua bentuk: confidence/support(Y) = support(X ∪ Y)/(support(X) support(Y)) = P(A,B)/(P(A)P(B)) pada Brin dkk. Lift simetris (lift(X→Y) = lift(Y→X)). Sihombing dkk. memakai syarat lift > 1 (Tabel 3) untuk memilih aturan.",
+   "label_saran": "eq:lift"
+  },
+  {
+   "id": "F16",
+   "group": "aturan_asosiasi",
+   "concept": "Leverage (ukuran Piatetsky-Shapiro) = support(X ∪ Y) - support(X) support(Y)",
+   "requested_form": "leverage = support(X u Y) - support(X) support(Y)",
+   "latex": "\\mathrm{leverage}(X \\rightarrow Y) = \\mathrm{support}(X \\cup Y) - \\mathrm{support}(X)\\,\\mathrm{support}(Y)",
+   "variables": "Selisih antara frekuensi kemunculan bersama yang teramati dan frekuensi harapan bila X dan Y saling bebas; 0 berarti bebas, rentang [-1, 1].",
+   "original_attribution": "Piatetsky-Shapiro (1991), 'Discovery, analysis, and presentation of strong rules' - dirujuk Geng & Hamilton (2006) dan dokumentasi mlxtend; tidak di pool.",
+   "recent_source_key": "geng2006interestingness",
+   "cite": "\\citep*{geng2006interestingness}",
+   "evidence_form": "persamaan tercetak (teks hlm. 8 dan Tabel IV hlm. 9)",
+   "location_in_source": "Bagian 2.1.1 'Objective Measures Based on Probability', hlm. 8 (teks) dan Tabel IV baris 'Piatetsky-Shapiro', hlm. 9 (ACM Comput. Surv. 38(3), Article 9)",
+   "evidence_snippet": "Lavrac et al. [1999] proposed weighted relative accuracy: WRAcc = P(A)(P(B|A) − P(B)). This measure combines the coverage P(A) and the added value P(B|A) − P(B). This measure is identical to Piatetsky-Shapiro's measure: P(AB) − P(A)P(B) [Piatetsky-Shapiro 1991]. [...] [Tabel IV, hlm. 9] Piatetsky-Shapiro | P(AB) − P(A)P(B)",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/1132960.1132963",
+   "additional_evidence": [
+    {
+     "source_key": "raschka2018mlxtend",
+     "location_in_source": "Dokumentasi mlxtend 0.25, User Guide 'association_rules', bagian Metrics; juga docstring association_rules.py pada paket terpasang (bukan artikel JOSS)",
+     "evidence_snippet": "levarage(A→C) = support(A→C) − support(A) × support(C), range: [−1, 1] introduced in [5] Leverage computes the difference between the observed frequency of A and C appearing together and the frequency that would be expected if A and C were independent. A leverage value of 0 indicates independence. [...] [5] Piatetsky-Shapiro, G., Discovery, analysis, and presentation of strong rules. Knowledge Discovery in Databases, 1991: p. 229-248.",
+     "url_opened": "https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/"
+    }
+   ],
+   "notes": "PERHATIAN penamaan: pada Tabel IV Geng & Hamilton, baris berlabel 'Leverage' berisi P(B|A) - P(A)P(B), besaran yang BERBEDA; rumus yang dipakai mlxtend dan skripsi adalah baris 'Piatetsky-Shapiro' P(AB) - P(A)P(B) (lihat rejected R02). Di skripsi tulis misalnya 'leverage (ukuran Piatetsky-Shapiro; Geng & Hamilton, 2006)'. 'levarage' adalah salah ketik di dokumentasi mlxtend. Dokumentasi mlxtend bukan bagian artikel JOSS; \\citep*{raschka2018mlxtend} hanya untuk perangkat lunaknya.",
+   "label_saran": "eq:leverage"
+  },
+  {
+   "id": "F17",
+   "group": "aturan_asosiasi",
+   "concept": "Conviction aturan X → Y",
+   "requested_form": "conviction = (1 - support(Y)) / (1 - confidence(X->Y))",
+   "latex": "\\mathrm{conviction}(X \\rightarrow Y) = \\frac{P(X)\\,P(\\neg Y)}{P(X, \\neg Y)} = \\frac{1 - \\mathrm{support}(Y)}{1 - \\mathrm{confidence}(X \\rightarrow Y)}",
+   "variables": "P(X) = support(X); P(¬Y) = 1 - support(Y); P(X, ¬Y): proporsi transaksi yang memuat X tetapi tidak memuat Y. Bernilai 1 bila X dan Y tidak berkaitan dan tak hingga bila aturan selalu benar (confidence = 1).",
+   "original_attribution": "Brin dkk. (1997) (brin1997dynamic)",
+   "recent_source_key": "brin1997dynamic",
+   "cite": "\\citep*{brin1997dynamic}",
+   "evidence_form": "persamaan tercetak (bentuk probabilitas); bentuk kedua setara aljabar dan tercetak di dokumentasi mlxtend",
+   "location_in_source": "Bagian 4 'Implication rules', hlm. 260 dan catatan kaki 5 (SIGMOD '97); diperiksa visual",
+   "evidence_snippet": "To fill the gap, we define conviction as P(A)P(¬B)/P(A, ¬B). [...] Unlike confidence, conviction factors in both P(A) and P(B) and always has a value of 1 when the relevant items are completely unrelated like the salmon and milk example above. • Unlike interest, rules which hold 100% of the time, like Vietnam veteran ⇒ more than five years old have the highest possible conviction value of ∞. [...] ⁵In practice we do not invert the ratio; instead we search for low values of the uninverted ratio. This way we do not have to deal with infinities.",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/253260.253325",
+   "additional_evidence": [
+    {
+     "source_key": "geng2006interestingness",
+     "location_in_source": "Tabel IV, hlm. 9; diperiksa visual",
+     "evidence_snippet": "Conviction | P(A)P(¬B) / P(A¬B)",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/1132960.1132963"
+    },
+    {
+     "source_key": "raschka2018mlxtend",
+     "location_in_source": "Dokumentasi mlxtend, User Guide 'association_rules', bagian Metrics",
+     "evidence_snippet": "conviction(A→C) = (1 − support(C)) / (1 − confidence(A→C)), range: [0, ∞] introduced in [6] A high conviction value means that the consequent is highly depending on the antecedent. For instance, in the case of a perfect confidence score, the denominator becomes 0 (due to 1 - 1) for which the conviction score is defined as 'inf'. Similar to lift, if items are independent, the conviction is 1.",
+     "url_opened": "https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/"
+    }
+   ],
+   "notes": "Bentuk yang diminta tidak dicetak Brin dkk. tetapi setara aljabar: P(X, ¬Y) = P(X) - P(X,Y), sehingga P(X)P(¬Y)/P(X, ¬Y) = (1 - P(Y)) / (1 - P(X,Y)/P(X)) = (1 - support(Y)) / (1 - confidence). Bentuk kedua tercetak di dokumentasi mlxtend dan dipakai implementasi (conviction = inf bila confidence = 1). Tanda '¬' berarti negasi (transaksi tanpa Y).",
+   "label_saran": "eq:conviction"
+  },
+  {
+   "id": "F18",
+   "group": "evaluasi_rekomendasi",
+   "concept": "Hit rate pada daftar top-K (HR@K) = banyaknya hit dibagi banyaknya kasus uji",
+   "requested_form": "hit rate HR@K",
+   "latex": "\\mathrm{HR@}K = \\frac{\\#\\mathrm{hit}}{n} = \\frac{1}{n}\\sum_{q=1}^{n} \\mathbf{1}\\left[\\, i_q \\in L_K(q) \\,\\right]",
+   "variables": "n: jumlah kasus uji (kueri leave-one-out; tiap kueri menyembunyikan satu item). i_q: item yang disembunyikan pada kueri q. L_K(q): daftar K rekomendasi teratas untuk kueri q. 1[.]: fungsi indikator (1 bila item tersembunyi masuk top-K).",
+   "original_attribution": "Deshpande & Karypis (2004) (deshpande2004itembased)",
+   "recent_source_key": "deshpande2004itembased",
+   "cite": "\\citep*{deshpande2004itembased}; pemakaian terkini \\citep*{latifi2021sessionaware}",
+   "evidence_form": "persamaan tercetak (Pers. 5)",
+   "location_in_source": "Bagian 6.1 'Experimental Design and Metrics', Pers. (5), hlm. 159 (ACM TOIS 22(1):143-177)",
+   "evidence_snippet": "The number of hits is the number of items in the test set that were also present in the top-N recommended items returned for each user. We computed two quality measures that we will refer to them as the hit-rate (HR) and the average reciprocal hit-rank (ARHR) that are defined as follows. If n is the total number of customers/users, the hit-rate of the recommendation algorithm was computed as: hit-rate (HR) = Number of hits / n . (5)",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/963770.963776",
+   "additional_evidence": [
+    {
+     "source_key": "cremonesi2010performance",
+     "location_in_source": "Bagian 2 'Testing Methodology', hlm. 40",
+     "evidence_snippet": "recall(N) = #hits / |T| [...] where |T| is the number of test ratings.",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/1864708.1864721"
+    },
+    {
+     "source_key": "latifi2021sessionaware",
+     "location_in_source": "Bagian 3.3 'Evaluation Protocol and Metrics', hlm. 25 versi arXiv v2",
+     "evidence_snippet": "First, when we consider only the immediate next item as the target item, the used metrics are the Hit Rate (HR) and Mean Reciprocal Rank (MRR).",
+     "url_opened": "https://arxiv.org/pdf/2011.03424v2"
+    }
+   ],
+   "notes": "Deshpande & Karypis menyembunyikan satu item acak per pengguna; evaluate_pairing.py menyembunyikan setiap item keranjang bergantian (adaptasi penulis). Bentuk indikator adalah penulisan ulang langsung 'Number of hits / n'. Implementasi pairing.per_query_metrics: hr@n = rata-rata (1 ≤ rank ≤ n). Latifi dkk. hanya menamai HR dan MRR tanpa rumus.",
+   "label_saran": "eq:hr"
+  },
+  {
+   "id": "F19",
+   "group": "evaluasi_rekomendasi",
+   "concept": "Precision@K pada evaluasi dengan satu item relevan per kasus uji = #hit / (K |T|) = HR@K / K",
+   "requested_form": "precision@K",
+   "latex": "\\mathrm{P@}K = \\frac{\\#\\mathrm{hit}}{K \\cdot |T|} = \\frac{\\mathrm{HR@}K}{K}",
+   "variables": "|T|: jumlah kasus uji. K: panjang daftar rekomendasi. #hit: jumlah kasus uji yang item relevannya masuk top-K. Berlaku bila setiap kasus uji punya tepat satu item relevan.",
+   "original_attribution": "Cremonesi dkk. (2010) (cremonesi2010performance)",
+   "recent_source_key": "cremonesi2010performance",
+   "cite": "\\citep*{cremonesi2010performance}; definisi umum \\citep*{zangerle2022evaluating}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bagian 2 'Testing Methodology', hlm. 40 (RecSys '10, pp. 39-46)",
+   "evidence_snippet": "The computation of recall and precision proceeds as follows. For any single test case, we have a single relevant item (the tested item i). By definition, recall for a single test can assume either the value 0 (in case of miss) or 1 (in case of hit). Similarly, precision can assume either the value 0 or 1/N. The overall recall and precision are defined by averaging over all test cases: recall(N) = #hits / |T| precision(N) = #hits / (N · |T|) = recall(N) / N where |T| is the number of test ratings.",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/1864708.1864721",
+   "additional_evidence": [
+    {
+     "source_key": "zangerle2022evaluating",
+     "location_in_source": "Bagian 3.4.4 'Evaluation Metrics', hlm. 170:21 (ACM Comput. Surv. 55(8), Article 170)",
+     "evidence_snippet": "Precision is the fraction of recommended items that are also relevant. In contrast, recall measures the fraction of relevant items that are indeed recommended. Often, this includes restricting relevant items to the k most relevant items, where the system's ability to identify the k most suitable items for a user is captured as opposed to evaluating all recommendations (often referred to as recall@k or precision@k, respectively) [101].",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/3556536"
+    }
+   ],
+   "notes": "Definisi umum precision@K (proporsi item relevan dalam top-K) hanya dinyatakan verbal oleh Zangerle & Bauer; bentuk tercetak Cremonesi dkk. berlaku karena setiap kueri leave-one-out memiliki tepat satu item relevan. Implementasi pairing.py: precision@k = hit(k)/k. Dengan K = 5 nilai P@5 paling besar 0,2 secara definisi - jelaskan agar pembaca tidak salah tafsir.",
+   "label_saran": "eq:precision-k"
+  },
+  {
+   "id": "F20",
+   "group": "evaluasi_rekomendasi",
+   "concept": "Mean reciprocal rank (MRR@K), setara average reciprocal hit-rank (ARHR) bila tiap kasus uji memiliki satu item tersembunyi",
+   "requested_form": "mean reciprocal rank MRR",
+   "latex": "\\mathrm{MRR@}K = \\frac{1}{n}\\sum_{i=1}^{h} \\frac{1}{p_i}",
+   "variables": "n: jumlah kasus uji. h: jumlah hit dalam top-K. p_i: posisi (peringkat, 1 ≤ p_i ≤ K) hit ke-i; kasus uji tanpa hit menyumbang 0.",
+   "original_attribution": "Deshpande & Karypis (2004), dengan nama ARHR",
+   "recent_source_key": "deshpande2004itembased",
+   "cite": "\\citep*{deshpande2004itembased}",
+   "evidence_form": "persamaan tercetak (Pers. 6)",
+   "location_in_source": "Bagian 6.1 'Experimental Design and Metrics', Pers. (6), hlm. 159",
+   "evidence_snippet": "This limitation is addressed by the average reciprocal hit-rank measure that rewards each hit based on where it occurred in the top-N list. If h is the number of hits that occurred at positions p1, p2, . . . , ph within the top-N lists (i.e., 1 ≤ pi ≤ N), then the average reciprocal hit-rank is equal to average reciprocal hit-rank (ARHR) = (1/n) Σ_{i=1}^{h} 1/pi . (6) That is, hits that occur earlier in the top-N lists are weighted higher than hits that occur later in the list. The highest value of ARHR is equal to the hit-rate and occurs when all the hits occur in the first position, whereas the lowest value of the ARHR is equal to hit-rate/N when all the hits occur in the last position in the list of the top-N recommendations.",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/963770.963776",
+   "additional_evidence": [
+    {
+     "source_key": "zangerle2022evaluating",
+     "location_in_source": "Bagian 3.4.4, hlm. 170:21",
+     "evidence_snippet": "Typical ranking metrics include normalized discounted cumulative gain (NDCG) [119], or mean reciprocal rank (MRR) [215].",
+     "url_opened": "https://dl.acm.org/doi/pdf/10.1145/3556536"
+    }
+   ],
+   "notes": "Nama 'MRR' dipakai Latifi dkk. (2021) dan Zangerle & Bauer (2022) tanpa rumus; rumus tercetak adalah ARHR Deshpande & Karypis, yang sama dengan MRR@K untuk satu item tersembunyi per kueri. Implementasi pairing.py: mrr@k = rata-rata (1/rank bila rank ≤ k, selain itu 0).",
+   "label_saran": "eq:mrr"
+  },
+  {
+   "id": "F21",
+   "group": "evaluasi_rekomendasi",
+   "concept": "Cakupan katalog (catalogue coverage) = proporsi item katalog yang pernah muncul dalam daftar top-K",
+   "requested_form": "catalogue coverage",
+   "latex": "\\mathrm{Cov}_{\\mathrm{katalog}} = \\frac{\\left|\\bigcup_{q=1}^{n} L_K(q)\\right|}{|I|}",
+   "variables": "L_K(q): himpunan item dalam daftar top-K untuk kueri q (q = 1..n selama periode uji). I: himpunan seluruh item katalog. |.|: kardinalitas.",
+   "original_attribution": "Herlocker dkk. (2004) sebagaimana dirujuk Zangerle & Bauer; rumus himpunan tercetak di Ge dkk. (2010) - keduanya tidak di pool (lihat candidate_sources: ge2010beyond).",
+   "recent_source_key": "zangerle2022evaluating",
+   "cite": "\\citep*{zangerle2022evaluating,latifi2021sessionaware}",
+   "evidence_form": "definisi verbal",
+   "location_in_source": "Bagian 3.4.4 'Evaluation Metrics', hlm. 170:21 (ACM Comput. Surv. 55(8), Article 170)",
+   "evidence_snippet": "Coverage metrics describe the extent to which items are actually recommended [4, 87]. This includes catalog coverage (i.e., the fraction of all available items that can be recommended; often referred to as item space coverage) [189], user space coverage [93] (i.e., the fraction of items that are recommended to a user; often also referred to as prediction coverage [87]), [...]",
+   "url_opened": "https://dl.acm.org/doi/pdf/10.1145/3556536",
+   "additional_evidence": [
+    {
+     "source_key": "latifi2021sessionaware",
+     "location_in_source": "Bagian 3.3 'Evaluation Protocol and Metrics', hlm. 25 versi arXiv v2",
+     "evidence_snippet": "Coverage tells us how many items actually ever appear in the top-n lists of users. This measure, which is also known as \"aggregate diversity\" [1], gives us some indication of how strongly personalized the recommendations of an algorithm are.",
+     "url_opened": "https://arxiv.org/pdf/2011.03424v2"
+    }
+   ],
+   "notes": "Sumber pool hanya memberi definisi verbal; notasi himpunan ditulis penulis. Rumus yang sama persis dicetak Ge dkk. (2010, RecSys '10, hlm. 258): 'Catalog coverage = |U_{j=1..N} I_L^j| / |I|' - kandidat sumber di luar pool (candidate_sources: ge2010beyond); bila ditambahkan ke pool, pakai sebagai rujukan rumus. 'Can be recommended' (Zangerle & Bauer) lebih longgar daripada 'actually ever appear' (Latifi dkk.); skripsi dan implementasi (pairing.summarize: |recommended ∩ katalog| / |katalog|) memakai arti kedua. 'Query coverage' (proporsi kueri yang memicu minimal satu aturan) adalah ukuran penulis sendiri, bukan cakupan katalog.",
+   "label_saran": "eq:coverage"
+  },
+  {
+   "id": "F22",
+   "group": "peramalan",
+   "concept": "Metode naive dan seasonal naive",
+   "requested_form": "naive and seasonal naive forecasts",
+   "latex": "\\hat{y}_{T+h\\mid T} = y_T, \\qquad \\hat{y}_{T+h\\mid T} = y_{T+h-m(k+1)},\\quad k = \\left\\lfloor \\frac{h-1}{m} \\right\\rfloor",
+   "variables": "y_T: observasi terakhir data latih. ŷ_{T+h|T}: ramalan h langkah ke depan dari titik asal T. m: periode musiman (m = 7 untuk data harian dengan pola mingguan). k: bagian bulat (h-1)/m, yaitu jumlah musim penuh sebelum waktu T+h.",
+   "original_attribution": "-",
+   "recent_source_key": "hyndman2021forecasting",
+   "cite": "\\citep*{hyndman2021forecasting}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bab 5.2 'Some simple forecasting methods', subbagian 'Naïve method' dan 'Seasonal naïve method' (OTexts, edisi ke-3, daring)",
+   "evidence_snippet": "For naïve forecasts, we simply set all forecasts to be the value of the last observation. That is, ŷ_{T+h|T} = y_T. [...] A similar method is useful for highly seasonal data. In this case, we set each forecast to be equal to the last observed value from the same season (e.g., the same month of the previous year). Formally, the forecast for time T+h is written as ŷ_{T+h|T} = y_{T+h−m(k+1)}, where m = the seasonal period, and k is the integer part of (h−1)/m (i.e., the number of complete years in the forecast period prior to time T+h).",
+   "url_opened": "https://otexts.com/fpp3/simple-methods.html",
+   "additional_evidence": [],
+   "notes": "Implementasi forecast_seasonal_naive (m = 7) mengambil nilai hari yang sama pada minggu terakhir, sesuai rumus untuk semua h. Seasonal naive juga menjadi pembanding H3 dan penyebut MASE (F29). Rumus FPP3 ditulis dalam TeX MathJax pada halaman HTML dan disalin apa adanya.",
+   "label_saran": "eq:naive"
+  },
+  {
+   "id": "F23",
+   "group": "peramalan",
+   "concept": "Ramalan rata-rata bergerak sederhana (SMA-k): rata-rata k observasi terakhir dipakai sebagai ramalan datar",
+   "requested_form": "moving average forecast",
+   "latex": "\\hat{y}_{T+h\\mid T} = \\frac{1}{k}\\sum_{j=0}^{k-1} y_{T-j}, \\qquad h = 1, 2, \\dots",
+   "variables": "k: panjang jendela (k = 7 hari pada Takar). y_{T-j}: observasi j hari sebelum titik asal T. Ramalan bernilai sama untuk semua horizon h.",
+   "original_attribution": "-",
+   "recent_source_key": "lauren2026optimizing",
+   "cite": "\\citep*{lauren2026optimizing}",
+   "evidence_form": "persamaan SMA tercetak (dipakai sumber sebagai indikator tren) + pernyataan benchmark SMA-7; pemakaian sebagai ramalan datar tidak dicetak sebagai persamaan tersendiri",
+   "location_in_source": "Bagian III.B 'The DR-ARMA Method' tahap 2, Pers. (2), hlm. 3710; Bagian IV.A 'Model Performance Metrics', hlm. 3712 (bit-Tech 8(3):3707-3717)",
+   "evidence_snippet": "Stage 2: Trend Analysis and Adaptive Calibration (Demand Response): To adjust for short-term demand shifts, a trend analysis using simple moving averages is conducted. A long-term trend t(i) and a short-term trend s(i) are calculated using a specified window length, defined in Equation (2). [...] t(i) = (1/N1) Σ_{j=0}^{N1−1} x(i−j), s(i) = (1/N2) Σ_{j=0}^{N2−1} x(i−j) (2) [...] [hlm. 3712] The DR-ARMA method was compared against two benchmark models: Simple Moving Average-7 (SMA-7) and the Naïve method.",
+   "url_opened": "https://jurnal.kdi.or.id/index.php/bt/article/download/3689/1980 (PDF diambil lewat sesi peramban karena situs memakai pemeriksaan Cloudflare)",
+   "additional_evidence": [],
+   "notes": "Pers. (2) Lauren dkk. adalah rata-rata bergerak sederhana ke belakang (trailing) yang sama dengan ramalan SMA bila dihitung pada titik asal T; pemakaiannya sebagai ramalan datar untuk semua h mengikuti benchmark SMA-7 di sumber yang sama, tetapi tidak dicetak sebagai persamaan tersendiri - tulis 'dirumuskan penulis berdasarkan Lauren dkk. (2026)'. JANGAN memakai rata-rata bergerak terpusat FPP3 Pers. (3.2) sebagai rumus ramalan (lihat rejected R05). Implementasi forecast_moving_average = np.full(h, mean(y[-7:])).",
+   "label_saran": "eq:ma"
+  },
+  {
+   "id": "F24",
+   "group": "peramalan",
+   "concept": "Pemulusan eksponensial sederhana (SES): bentuk rata-rata berbobot dan bentuk komponen (persamaan level)",
+   "requested_form": "simple exponential smoothing (level equation / weighted average form)",
+   "latex": "\\begin{aligned} \\hat{y}_{T+1\\mid T} &= \\alpha y_T + \\alpha(1-\\alpha) y_{T-1} + \\alpha(1-\\alpha)^2 y_{T-2} + \\cdots \\\\ \\hat{y}_{T+1\\mid T} &= \\alpha y_T + (1-\\alpha)\\,\\hat{y}_{T\\mid T-1} \\\\ \\hat{y}_{t+h\\mid t} &= \\ell_t, \\qquad \\ell_t = \\alpha y_t + (1-\\alpha)\\,\\ell_{t-1} \\end{aligned}",
+   "variables": "α: parameter pemulusan (0 ≤ α ≤ 1). ℓ_t: level (nilai terhaluskan) pada waktu t. ŷ: ramalan; ramalan SES datar untuk semua h (ŷ_{T+h|T} = ell_T).",
+   "original_attribution": "Brown (1959) - disebut Gardner (2006, Bagian 3.1): 'simple exponential smoothing (Brown, 1959)'; Brown tidak di pool.",
+   "recent_source_key": "hyndman2021forecasting",
+   "cite": "\\citep*{hyndman2021forecasting}",
+   "evidence_form": "persamaan tercetak (Pers. 8.1, bentuk rata-rata berbobot, bentuk komponen)",
+   "location_in_source": "Bab 8.1 'Simple exponential smoothing': Pers. (8.1), subbagian 'Weighted average form' dan 'Component form'",
+   "evidence_snippet": "Forecasts are calculated using weighted averages, where the weights decrease exponentially as observations come from further in the past — the smallest weights are associated with the oldest observations: ŷ_{T+1|T} = αy_T + α(1−α)y_{T−1} + α(1−α)²y_{T−2} + ⋯, (8.1) where 0 ≤ α ≤ 1 is the smoothing parameter. [...] The forecast at time T+1 is equal to a weighted average between the most recent observation y_T and the previous forecast ŷ_{T|T−1}: ŷ_{T+1|T} = αy_T + (1−α)ŷ_{T|T−1}, [...] The component form of simple exponential smoothing is given by: Forecast equation ŷ_{t+h|t} = ℓ_t; Smoothing equation ℓ_t = αy_t + (1−α)ℓ_{t−1}, where ℓ_t is the level (or the smoothed value) of the series at time t.",
+   "url_opened": "https://otexts.com/fpp3/ses.html",
+   "additional_evidence": [
+    {
+     "source_key": "gardner2006exponential",
+     "location_in_source": "Bagian 3.1 'Standard methods', hlm. 639",
+     "evidence_snippet": "Method N-N denotes no trend with no seasonality, or simple exponential smoothing (Brown, 1959).",
+     "url_opened": "https://www.bauer.uh.edu/egardner/3301H%20Operations%20Management/ESG%20Publications/2006%20Exp.%20Sm.%20State%20of%20the%20art%20-%20Part%20II.pdf"
+    }
+   ],
+   "notes": "Implementasi statsmodels SimpleExpSmoothing (SPEC 7.3).",
+   "label_saran": "eq:ses"
+  },
+  {
+   "id": "F25",
+   "group": "peramalan",
+   "concept": "Holt-Winters aditif dengan tren teredam (damped trend) - persamaan level, tren, musiman, dan ramalan",
+   "requested_form": "Holt-Winters additive method with damped trend",
+   "latex": "\\begin{aligned} \\hat{y}_{t+h\\mid t} &= \\ell_t + \\phi_h b_t + s_{t+h-m(k+1)} \\\\ \\ell_t &= \\alpha\\,(y_t - s_{t-m}) + (1-\\alpha)(\\ell_{t-1} + \\phi b_{t-1}) \\\\ b_t &= \\beta^{*}(\\ell_t - \\ell_{t-1}) + (1-\\beta^{*})\\,\\phi b_{t-1} \\\\ s_t &= \\gamma\\,(y_t - \\ell_{t-1} - \\phi b_{t-1}) + (1-\\gamma)\\,s_{t-m} \\end{aligned} \\qquad \\phi_h = \\phi + \\phi^2 + \\dots + \\phi^h",
+   "variables": "ℓ_t: level; b_t: tren (kemiringan); s_t: komponen musiman aditif; m: panjang musim (7 hari); α, β*, γ: parameter pemulusan level, tren, musiman; φ: parameter peredam tren (0 < φ < 1; FPP3 biasanya membatasi 0,8-0,98); φ_h = φ + φ^2 + ... + φ^h; k: bagian bulat (h-1)/m.",
+   "original_attribution": "Holt (1957, dicetak ulang 2004: holt2004forecasting) dan Winters (1960: winters1960forecasting); tren teredam Gardner & McKenzie (1985, tidak di pool).",
+   "recent_source_key": "hyndman2021forecasting",
+   "cite": "\\citep*{hyndman2021forecasting}; asal metode \\citep*{holt2004forecasting,winters1960forecasting}",
+   "evidence_form": "persamaan tercetak pada Tabel 8.6 (gambar) + teks Bab 8.2-8.3",
+   "location_in_source": "Bab 8.4 'A taxonomy of exponential smoothing methods', Tabel 8.6, sel (A_d, A) (gambar figs/pegelstable-1.png); pendamping Bab 8.2 'Damped trend methods' dan Bab 8.3 'Holt-Winters' additive method'",
+   "evidence_snippet": "Table 8.6: Formulas for recursive calculations and point forecasts. In each case, ℓ_t denotes the series level at time t, b_t denotes the slope at time t, s_t denotes the seasonal component of the series at time t, and m denotes the number of seasons in a year; α, β*, γ and φ are smoothing parameters, φ_h = φ+φ²+⋯+φ^h, and k is the integer part of (h−1)/m. [Sel (A_d, A) pada gambar Tabel 8.6:] ŷ_{t+h|t} = ℓ_t + φ_h b_t + s_{t+h−m(k+1)}; ℓ_t = α(y_t − s_{t−m}) + (1 − α)(ℓ_{t−1} + φb_{t−1}); b_t = β*(ℓ_t − ℓ_{t−1}) + (1 − β*)φb_{t−1}; s_t = γ(y_t − ℓ_{t−1} − φb_{t−1}) + (1 − γ)s_{t−m}",
+   "url_opened": "https://otexts.com/fpp3/taxonomy.html ; gambar tabel: https://otexts.com/fpp3/figs/pegelstable-1.png",
+   "additional_evidence": [
+    {
+     "source_key": "hyndman2021forecasting",
+     "location_in_source": "Bab 8.2 'Damped trend methods'",
+     "evidence_snippet": "Motivated by this observation, Gardner & McKenzie (1985) introduced a parameter that \"dampens\" the trend to a flat line some time in the future. [...] In conjunction with the smoothing parameters α and β* (with values between 0 and 1 as in Holt's method), this method also includes a damping parameter 0<φ<1: ŷ_{t+h|t} = ℓ_t + (φ+φ² + ⋯ + φ^h)b_t ; ℓ_t = αy_t + (1 − α)(ℓ_{t−1} + φb_{t−1}) ; b_t = β*(ℓ_t − ℓ_{t−1}) + (1 − β*)φb_{t−1}.",
+     "url_opened": "https://otexts.com/fpp3/holt.html"
+    },
+    {
+     "source_key": "hyndman2021forecasting",
+     "location_in_source": "Bab 8.3 'Methods with seasonality', subbagian 'Holt-Winters' additive method'",
+     "evidence_snippet": "Holt (1957) and Winters (1960) extended Holt's method to capture seasonality. [...] The component form for the additive method is: ŷ_{t+h|t} = ℓ_t + hb_t + s_{t+h−m(k+1)} ; ℓ_t = α(y_t − s_{t−m}) + (1 − α)(ℓ_{t−1} + b_{t−1}) ; b_t = β*(ℓ_t − ℓ_{t−1}) + (1 − β*)b_{t−1} ; s_t = γ(y_t − ℓ_{t−1} − b_{t−1}) + (1 − γ)s_{t−m}, where k is the integer part of (h−1)/m, which ensures that the estimates of the seasonal indices used for forecasting come from the final year of the sample.",
+     "url_opened": "https://otexts.com/fpp3/holt-winters.html"
+    },
+    {
+     "source_key": "gardner2006exponential",
+     "location_in_source": "Tabel 1 'Standard exponential smoothing methods', baris DA (Damped additive), kolom A (Additive), bentuk rekurensi, hlm. 640; diperiksa visual",
+     "evidence_snippet": "S_t = α(X_t − I_{t−p}) + (1 − α)(S_{t−1} + φT_{t−1}); T_t = γ(S_t − S_{t−1}) + (1 − γ)φT_{t−1}; I_t = δ(X_t − S_t) + (1 − δ)I_{t−p}; X̂_t(m) = S_t + Σ_{i=1}^{m} φ^i T_t + I_{t−p+m}",
+     "url_opened": "https://www.bauer.uh.edu/egardner/3301H%20Operations%20Management/ESG%20Publications/2006%20Exp.%20Sm.%20State%20of%20the%20art%20-%20Part%20II.pdf"
+    }
+   ],
+   "notes": "Tabel 8.6 FPP3 berupa gambar; persamaan ditranskripsikan dari gambar dan diperiksa visual. Implementasi statsmodels 0.15 (tsa/holtwinters/_exponential_smoothers.pyx, fungsi untuk '(A,A) & (Ad,A)') memakai persamaan pembaruan level, tren, dan musiman yang sama persis dengan sel (A_d, A). Gardner (2006) menulis pembaruan musiman dengan level saat ini, I_t = δ(X_t - S_t) + ..., setara bentuk γ* di FPP3 8.3 - jangan dicampur dengan bentuk FPP3/statsmodels. SPEC: additive damped trend + additive weekly seasonality (m = 7).",
+   "label_saran": "eq:holt-winters"
+  },
+  {
+   "id": "F26",
+   "group": "peramalan",
+   "concept": "Model aditif gradient boosting dengan shrinkage (learning rate)",
+   "requested_form": "F_m(x) = F_{m-1}(x) + nu h_m(x)",
+   "latex": "F_m(\\mathbf{x}) = F_{m-1}(\\mathbf{x}) + \\nu \\cdot \\rho_m\\, h(\\mathbf{x}; \\mathbf{a}_m), \\qquad 0 < \\nu \\le 1",
+   "variables": "F_m(x): model aditif setelah iterasi ke-m. h(x; a_m): pembelajar dasar (pohon regresi) berparameter a_m yang dicocokkan ke gradien negatif (residu semu). ρ_m: besar langkah (line search). ν: laju belajar/shrinkage. Pada pohon regresi (ISL Algoritma 8.2) ditulis f̂(x) ← f̂(x) + λ f̂^b(x).",
+   "original_attribution": "Friedman (2001) (friedman2001greedy)",
+   "recent_source_key": "friedman2001greedy",
+   "cite": "\\citep*{friedman2001greedy}; bentuk sederhana \\citep*{james2021introduction}",
+   "evidence_form": "persamaan tercetak (Pers. 36)",
+   "location_in_source": "Bagian 5 'Regularization', Pers. (36), hlm. 1203 (Ann. Statist. 29(5):1189-1232); diperiksa visual",
+   "evidence_snippet": "In the context of additive models (2) constructed in a forward stagewise manner (9), (10), a simple shrinkage strategy is to replace line 6 of the generic algorithm (Algorithm 1) with (36) F_m(x) = F_{m−1}(x) + ν · ρ_m h(x; a_m), 0 < ν ≤ 1, and making the corresponding equivalent changes in all of the specific algorithms (Algorithms 2–6). Each update is simply scaled by the value of the \"learning rate\" parameter ν.",
+   "url_opened": "https://projecteuclid.org/journalArticle/Download?urlId=10.1214%2Faos%2F1013203451",
+   "additional_evidence": [
+    {
+     "source_key": "james2021introduction",
+     "location_in_source": "Bab 8.2.3, Algoritma 8.2 'Boosting for Regression Trees', Pers. (8.10)-(8.12), hlm. 347 (edisi ke-2, cetakan terkoreksi 21 Juni 2023)",
+     "evidence_snippet": "(b) Update f̂ by adding in a shrunken version of the new tree: f̂(x) ← f̂(x) + λ f̂^b(x). (8.10) (c) Update the residuals, r_i ← r_i − λ f̂^b(x_i). (8.11) 3. Output the boosted model, f̂(x) = Σ_{b=1}^{B} λ f̂^b(x). (8.12) [...] 2. The shrinkage parameter λ, a small positive number. This controls the rate at which boosting learns.",
+     "url_opened": "https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf.download.html (tautan resmi statlearning.com ke berkas PDF 'Corrected Printing: June 21, 2023')"
+    }
+   ],
+   "notes": "Bentuk yang diminta (F_m = F_{m-1} + ν h_m) adalah penyederhanaan: ρ_m h(x; a_m) Friedman digabung menjadi h_m (pada pohon regresi nilai daun sudah memuat langkah optimal; ISL menulis λ f^b). scikit-learn HistGradientBoostingRegressor: parameter learning_rate = ν. ISL edisi ke-2 terbit 2021; yang dibuka adalah cetakan terkoreksi Juni 2023 dengan isi Algoritma 8.2 yang sama.",
+   "label_saran": "eq:gradient-boosting"
+  },
+  {
+   "id": "F27",
+   "group": "peramalan",
+   "concept": "Galat ramalan, MAE, dan RMSE",
+   "requested_form": "MAE and RMSE",
+   "latex": "e_{T+h} = y_{T+h} - \\hat{y}_{T+h\\mid T}, \\qquad \\mathrm{MAE} = \\frac{1}{n}\\sum_{t=1}^{n} |e_t|, \\qquad \\mathrm{RMSE} = \\sqrt{\\frac{1}{n}\\sum_{t=1}^{n} e_t^2}",
+   "variables": "e: galat ramalan (aktual dikurangi ramalan). n: jumlah galat yang dievaluasi (seluruh deret, titik asal, dan horizon dalam kelompok yang dilaporkan). MAE dan RMSE bergantung skala (satuan data).",
+   "original_attribution": "-",
+   "recent_source_key": "hyndman2021forecasting",
+   "cite": "\\citep*{hyndman2021forecasting}; pendamping \\citep*{lauren2026optimizing}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bab 5.8 'Evaluating point forecast accuracy', subbagian 'Forecast errors' dan 'Scale-dependent errors'",
+   "evidence_snippet": "A forecast \"error\" is the difference between an observed value and its forecast. [...] It can be written as e_{T+h} = y_{T+h} − ŷ_{T+h|T}, [...] The two most commonly used scale-dependent measures are based on the absolute errors or squared errors: Mean absolute error: MAE = mean(|e_t|), Root mean squared error: RMSE = √mean(e_t²).",
+   "url_opened": "https://otexts.com/fpp3/accuracy.html",
+   "additional_evidence": [
+    {
+     "source_key": "lauren2026optimizing",
+     "location_in_source": "Bagian III.D 'Model Evaluation', Pers. (5)-(6), hlm. 3711",
+     "evidence_snippet": "MAE = (1/n) Σ_{t=1}^{n} |x(t) − x̂(t)| (5) RMSE = √((1/n) Σ_{t=1}^{n} (x(t) − x̂(t))²) (6)",
+     "url_opened": "https://jurnal.kdi.or.id/index.php/bt/article/download/3689/1980 (PDF diambil lewat sesi peramban karena situs memakai pemeriksaan Cloudflare)"
+    }
+   ],
+   "notes": "mean(.) pada FPP3 sama dengan (1/n) sum. Implementasi forecasting.error_metrics memakai error = ŷ - y (tanda tidak berpengaruh pada MAE dan RMSE, tetapi berpengaruh pada bias; lihat F30).",
+   "label_saran": "eq:mae-rmse"
+  },
+  {
+   "id": "F28",
+   "group": "peramalan",
+   "concept": "Weighted absolute percentage error (WAPE) = jumlah galat mutlak dibagi jumlah nilai aktual mutlak",
+   "requested_form": "WAPE = sum|e| / sum|y|",
+   "latex": "\\mathrm{WAPE} = \\frac{\\sum_{t} |e_t|}{\\sum_{t} |y_t|}",
+   "variables": "e_t: galat ramalan; y_t: nilai aktual; penjumlahan atas seluruh titik yang dievaluasi (per deret atas horizon pada definisi sumber; atas seluruh deret, titik asal, dan horizon pada 'WAPE keseluruhan' SPEC 7.3).",
+   "original_attribution": "-",
+   "recent_source_key": "hewamalage2022forecast",
+   "cite": "\\citep*{hewamalage2022forecast}",
+   "evidence_form": "persamaan tercetak pada Tabel 8 (diperiksa visual)",
+   "location_in_source": "Tabel 8 (lanjutan) 'Error measure definitions in the forecasting literature', hlm. 817 (Data Min. Knowl. Disc. 37(2):788-832)",
+   "evidence_snippet": "Weighted Absolute Percentage Error (WAPE) | WAPE = Σ_{t=T+1}^{T+h} |e_t| / Σ_{t=T+1}^{T+h} |y_t| [...] Normalized Deviation (ND, Salinas et al. 2020) - The scale in the denominator is computed globally using many series. | ND = Σ_{i=1}^{n} |e_i| / Σ_{i=1}^{n} |y_i|",
+   "url_opened": "https://link.springer.com/content/pdf/10.1007/s10618-022-00894-5.pdf",
+   "additional_evidence": [],
+   "notes": "Hewamalage dkk. mendefinisikan WAPE per deret atas horizon; 'WAPE keseluruhan' SPEC (jumlah |galat| semua deret, titik asal, dan horizon dibagi jumlah |aktual|) sama dengan ND pada tabel yang sama (skala dihitung global). Sebutkan definisi yang dipakai. Implementasi: wape = sum|ŷ - y| / sum|y|. fildes2022retail (pool) menyebut wMAPE = MAD/Mean, tetapi hanya versi kertas kerjanya yang terbaca - jangan kutip kalimatnya sebelum membaca versi jurnal. Tahun: pool mencatat 2022 (Crossref issued); terbitan cetak DMKD 37(2) 2023.",
+   "label_saran": "eq:wape"
+  },
+  {
+   "id": "F29",
+   "group": "peramalan",
+   "concept": "Mean absolute scaled error (MASE) dengan penskala MAE seasonal naive in-sample",
+   "requested_form": "MASE with seasonal naive scaling",
+   "latex": "q_j = \\frac{e_j}{\\dfrac{1}{T-m}\\sum_{t=m+1}^{T} |y_t - y_{t-m}|}, \\qquad \\mathrm{MASE} = \\mathrm{mean}(|q_j|)",
+   "variables": "q_j: galat terskala. e_j: galat ramalan pada data uji. T: panjang data latih (hingga titik asal). m: periode musiman (7). Penyebut: MAE ramalan seasonal naive satu musim pada data latih. MASE < 1 berarti lebih baik daripada seasonal naive in-sample.",
+   "original_attribution": "Hyndman & Koehler (2006) (hyndman2006another) - untuk MASE dengan penskala naive non-musiman.",
+   "recent_source_key": "hyndman2021forecasting",
+   "cite": "\\citep*{hyndman2021forecasting}; asal MASE \\citep*{hyndman2006another}",
+   "evidence_form": "persamaan tercetak",
+   "location_in_source": "Bab 5.8 'Evaluating point forecast accuracy', subbagian 'Scaled errors'",
+   "evidence_snippet": "Scaled errors were proposed by Hyndman & Koehler (2006) as an alternative to using percentage errors when comparing forecast accuracy across series with different units. They proposed scaling the errors based on the training MAE from a simple forecast method. [...] For seasonal time series, a scaled error can be defined using seasonal naïve forecasts: q_j = e_j / ((1/(T−m)) Σ_{t=m+1}^{T} |y_t − y_{t−m}|). The mean absolute scaled error is simply MASE = mean(|q_j|).",
+   "url_opened": "https://otexts.com/fpp3/accuracy.html",
+   "additional_evidence": [
+    {
+     "source_key": "hyndman2006another",
+     "location_in_source": "Bagian 3 'Scaled errors', hlm. 12 versi naskah penulis (terbit di IJF 22(4):679-688)",
+     "evidence_snippet": "We propose a new but related idea that is suitable for all situations, by scaling the error based on the in-sample MAE from the naïve (random walk) forecast method. Thus, a scaled error is defined as q_t = e_t / ((1/(n−1)) Σ_{i=2}^{n} |Y_i − Y_{i−1}|) [...] The Mean Absolute Scaled Error is simply MASE = mean(|q_t|).",
+     "url_opened": "https://robjhyndman.com/papers/mase.pdf"
+    },
+    {
+     "source_key": "hewamalage2022forecast",
+     "location_in_source": "Bagian 4.2, hlm. 821",
+     "evidence_snippet": "With measures that scale based on benchmark errors on intermittent series, it can be problematic when benchmark errors have prefect predictions (zero errors), for example with the naïve method giving exact zeros on zero actual values.",
+     "url_opened": "https://link.springer.com/content/pdf/10.1007/s10618-022-00894-5.pdf"
+    }
+   ],
+   "notes": "Versi musiman (penskala seasonal naive, m = 7) tercetak di FPP3, bukan di Hyndman & Koehler (2006) yang memakai naive non-musiman (lihat rejected R03). Implementasi mase_scales: skala = MAE seasonal naive in-sample (data ≤ titik asal) per deret dan titik asal; MASE = rata-rata MAE/skala atas pasangan deret-titik asal; skala nol dikecualikan dan jumlahnya dicatat (sesuai peringatan Hewamalage dkk. tentang deret intermiten). 'prefect' adalah salah ketik di sumber.",
+   "label_saran": "eq:mase"
+  },
+  {
+   "id": "F30",
+   "group": "peramalan",
+   "concept": "Bias ramalan sebagai mean error (ME)",
+   "requested_form": "bias (mean error)",
+   "latex": "\\mathrm{ME} = \\frac{1}{n}\\sum_{t=1}^{n} \\left(y_t - \\hat{y}_t\\right)",
+   "variables": "y_t: nilai aktual; y-hat_t: ramalan; n: jumlah galat. ME positif berarti ramalan rata-rata terlalu rendah (under-forecast) menurut konvensi sumber.",
+   "original_attribution": "-",
+   "recent_source_key": "hewamalage2022forecast",
+   "cite": "\\citep*{hewamalage2022forecast}",
+   "evidence_form": "persamaan tercetak (Pers. 4)",
+   "location_in_source": "Bagian 4.2 'Error measures for forecast evaluation', Pers. (4), hlm. 812",
+   "evidence_snippet": "Therefore, forecast bias is calculated with a sign, as opposed to absolute errors, so that it indicates the direction of the forecast errors, either positive or negative. For example, scale-dependent forecast bias can be assessed with the Mean Error (ME) as defined in Equation 4. Here, y_t indicates the true value of the series, ŷ_t the forecast and n, the number of all available errors. Other scale-free versions of bias can be defined by scaling with respect to appropriate scaling factors, such as actual values of the series. ME = (1/n) Σ_{t=1}^{n} (y_t − ŷ_t) (4)",
+   "url_opened": "https://link.springer.com/content/pdf/10.1007/s10618-022-00894-5.pdf",
+   "additional_evidence": [],
+   "notes": "PENTING (tanda): implementasi forecasting.error_metrics memakai error = ŷ - y dan bias = mean(error), jadi bias di berkas results = -ME; bias positif di results berarti ramalan berlebih (over-forecast). Di skripsi tuliskan rumus sesuai angka yang dilaporkan, misalnya 'bias = (1/n) sum (y-hat_t - y_t) = -ME (Hewamalage dkk., 2023)', dan jelaskan arti tandanya. bias_pct = sum(ŷ - y)/sum|y| adalah bias berskala rancangan penulis, sejalan dengan kalimat sumber tentang 'scale-free versions of bias'.",
+   "label_saran": "eq:bias"
+  },
+  {
+   "id": "F32",
+   "group": "usabilitas",
+   "concept": "Skor System Usability Scale (SUS)",
+   "requested_form": "SUS = 2.5 x [sum odd (x_i - 1) + sum even (5 - x_i)]",
+   "latex": "\\mathrm{SUS} = 2{,}5 \\left[\\sum_{i \\in \\{1,3,5,7,9\\}} (x_i - 1) + \\sum_{i \\in \\{2,4,6,8,10\\}} (5 - x_i)\\right]",
+   "variables": "x_i: posisi skala jawaban butir ke-i (1 = sangat tidak setuju sampai 5 = sangat setuju). Butir ganjil bernada positif, butir genap bernada negatif. Kontribusi tiap butir 0-4; skor SUS 0-100; skor per butir tidak bermakna sendiri.",
+   "original_attribution": "Brooke (1996) (brooke1996sus)",
+   "recent_source_key": "hyzy2022system",
+   "cite": "\\citep*{brooke1996sus}; terkini \\citep{hyzy2022system}",
+   "evidence_form": "prosedur perhitungan tercetak (langkah bernomor/kalimat)",
+   "location_in_source": "Methods, subbagian 'SUS Score' (JMIR mHealth uHealth 10(8):e37290; PMC9437782)",
+   "evidence_snippet": "A SUS score is computed using the 10 Likert ratings that is typically completed by a user after having been exposed to the system for a period of time. The process for computing a SUS score is as follows: Subtract 1 from the user's Likert ratings for odd-numbered items or questions. Subtract the user's Likert ratings from 5 for even-numbered items. Each item score will range from 0 to 4. Sum the numbers and multiply the total by 2.5. This calculation will provide a range of possible SUS scores from 0 to 100 [7].",
+   "url_opened": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9437782/fullTextXML",
+   "additional_evidence": [
+    {
+     "source_key": "brooke1996sus",
+     "location_in_source": "Bagian 'Scoring SUS' (naskah bab penulis, salinan AHRQ, hlm. 5 PDF; bab terbit dalam Usability Evaluation in Industry, hlm. 207-212 menurut pool)",
+     "evidence_snippet": "SUS yields a single number representing a composite measure of the overall usability of the system being studied. Note that scores for individual items are not meaningful on their own. To calculate the SUS score, first sum the score contributions from each item. Each item's score contribution will range from 0 to 4. For items 1,3,5,7,and 9 the score contribution is the scale position minus 1. For items 2,4,6,8 and 10, the contribution is 5 minus the scale position. Multiply the sum of the scores by 2.5 to obtain the overall value of SU. SUS scores have a range of 0 to 100.",
+     "url_opened": "https://digital.ahrq.gov/sites/default/files/docs/survey/systemusabilityscale%2528sus%2529_comp%255B1%255D.pdf"
+    }
+   ],
+   "notes": "Hyzy dkk. memiliki 7 penulis sehingga memakai \\citep tanpa bintang; Brooke 1 penulis memakai \\citep*. Contoh skor di naskah Brooke tertulis 'SUS Score = 22 *22.5 = 55' (salah ketik; seharusnya 22 x 2,5 = 55) - jangan disalin. Salinan Brooke yang dibuka adalah naskah penulis yang dihosting AHRQ, bukan halaman buku terbitan; kutip isi, bukan nomor halaman buku. UAT/SUS belum dilaksanakan (PANDUAN 5): rumus dipakai untuk instrumen, hasil diberi penanda [ISI SETELAH UAT].",
+   "label_saran": "eq:sus"
+  }
+ ],
+ "rejected": [
+  {
+   "id": "R01",
+   "group": "kopi",
+   "concept": "Rasio seduh espreso = massa minuman / dosis, bila disebut sebagai definisi 'brew ratio' Schmieder dkk. (2023)",
+   "related": "F05",
+   "source": "schmieder2023influence",
+   "why": "Orientasi terbalik. Schmieder dkk. (2023), Bagian 1 (PMC10418593): 'The ratio between the ground coffee mass in the puck and the extracted EC mass in the cup is called the brew ratio (BR).' dengan espreso BR 1/2 (puck 20 g, minuman 40 g). Bentuk massa minuman/dosis (= 2 untuk espreso) tidak tercetak di sumber pool mana pun yang dibuka (Moroney dkk. 2019 hanya menyebut konvensi '18 g in - 36 g out'; Cameron dkk. 2020 hanya '20 g in / 40 g out'). Pakai F05 (BR = m_kopi/m_espreso) atau tulis 'dosis : hasil = 1 : 2'. Bila aplikasi menyimpan hasil/dosis, sebut besaran itu 'rasio hasil (1/BR)' sebagai konvensi penulis, jangan diatribusikan ke Schmieder dkk."
+  },
+  {
+   "id": "R02",
+   "group": "aturan_asosiasi",
+   "concept": "Leverage = P(B|A) - P(A)P(B), yaitu baris berlabel 'Leverage' pada Tabel IV Geng & Hamilton (2006)",
+   "related": "F16",
+   "source": "geng2006interestingness",
+   "why": "Besaran yang berbeda dari leverage yang dipakai mlxtend dan skripsi. Tabel IV hlm. 9 (diperiksa visual) memuat 'Leverage | P(B|A) - P(A)P(B)' dan secara terpisah 'Piatetsky-Shapiro | P(AB) - P(A)P(B)'. mlxtend (dokumentasi association_rules; association_rules.py di paket terpasang) mendefinisikan leverage = support(A→C) - support(A) x support(C) dengan rujukan Piatetsky-Shapiro (1991), yaitu baris Piatetsky-Shapiro. Jangan mengutip baris 'Leverage' Geng & Hamilton untuk rumus leverage skripsi; gunakan F16."
+  },
+  {
+   "id": "R03",
+   "group": "peramalan",
+   "concept": "MASE dengan penskala seasonal naive diatribusikan ke Hyndman & Koehler (2006)",
+   "related": "F29",
+   "source": "hyndman2006another",
+   "why": "Atribusi tidak tepat. Naskah penulis Hyndman & Koehler (robjhyndman.com/papers/mase.pdf, Bagian 3) mendefinisikan galat terskala dengan 'the in-sample MAE from the naïve (random walk) forecast method', q_t = e_t / ((1/(n-1)) sum_{i=2}^{n} |Y_i - Y_{i-1}|), yaitu naive non-musiman. Bentuk musiman (penyebut (1/(T-m)) sum |y_t - y_{t-m}|) tercetak di Hyndman & Athanasopoulos (2021), Bab 5.8. Sitasi yang benar untuk F29: \\citep*{hyndman2021forecasting} untuk bentuk musiman dan \\citep*{hyndman2006another} untuk gagasan MASE."
+  },
+  {
+   "id": "R04",
+   "group": "statistika",
+   "concept": "Rumus interval kepercayaan persentil bootstrap yang diatribusikan ke Efron (1979)",
+   "related": "M02 (F31)",
+   "source": "efron1979bootstrap",
+   "why": "Efron (1979) memperkenalkan bootstrap untuk menaksir distribusi sampling (abstrak dan Bagian 1), tetapi tidak mendefinisikan interval persentil. Remark D (hlm. 21, PDF pindaian Project Euclid, diperiksa visual) justru menunjukkan bahwa pernyataan kepercayaan dari kuantil bootstrap median 'Prob*{x(4) < θ̂* < x(10)} = .914' bila dipakai sebagai 'θ̂ − θ as a pivotal quantity' menghasilkan interval 'Prob_F{2x(7) − x(10) < θ < 2x(7) − x(4)} ≈ .914, which is the reflection of interval (8.3) about the median!'. Efron (1979) boleh disitasi untuk prinsip bootstrap, bukan untuk rumus interval persentil (lihat M02)."
+  },
+  {
+   "id": "R05",
+   "group": "peramalan",
+   "concept": "Rata-rata bergerak terpusat FPP3 Pers. (3.2) sebagai rumus ramalan MA-7",
+   "related": "F23",
+   "source": "hyndman2021forecasting",
+   "why": "Salah konsep. FPP3 Bab 3.3 'Moving averages' menulis 'A moving average of order m can be written as T̂_t = (1/m) sum_{j=-k}^{k} y_{t+j}, (3.2) where m = 2k+1', dipakai untuk menaksir komponen tren-siklus pada dekomposisi. Rumus itu memakai observasi masa depan (y_{t+j}, j > 0); bila dipakai sebagai ramalan terjadi kebocoran data. Ramalan MA-7 yang diimplementasikan (rata-rata 7 hari terakhir) harus memakai F23."
+  }
+ ],
+ "missing": [
+  {
+   "id": "M01",
+   "group": "penskalaan_resep",
+   "concept": "Volume es dari massa dan massa jenis (ρ_es sekitar 0,917 g/cm3 di dekat 0 °C)",
+   "requested_form": "V = m / rho_ice, rho_ice ~ 0.917 g/cm3 near 0 C",
+   "notes": "Tidak ada sumber di pool yang menyatakan massa jenis es. Yang sudah dicoba: pencarian kata 'ice', 'density', '0.917', '916' pada abstract_evidence, relevance, dan verify_notes seluruh 211 entri (hasil: hanya bccook2015basic, batali2022sensory, azzahra2025forecasting yang memuat kata 'ice' dan tidak ada yang membahas massa jenis); catatan verifikasi bccook2015basic menegaskan bab konversi resep tidak memuat 'ice'; tidak ada sumber kopi di pool yang membahas es batu. Sumber di luar pool yang dibuka dan mendukung: Feistel & Wagner (2006), J. Phys. Chem. Ref. Data 35(2):1021-1047, DOI 10.1063/1.2183324 (terverifikasi Crossref; PDF dari situs TEOS-10) - lihat candidate_sources 'feistel2006new'. Status: TERKONFIRMASI OLEH SUMBER KANDIDAT; pindahkan ke confirmed setelah feistel2006new ditambahkan ke referensi_terverifikasi.json. Sampai saat itu, tulis 0,917 g/ml sebagai asumsi terdokumentasi (ASSUMPTIONS.md) tanpa persamaan bernomor.",
+   "related": "F08",
+   "candidate_evidence": {
+    "candidate_key": "feistel2006new",
+    "latex_if_added": "V_{\\mathrm{es}} = \\frac{m_{\\mathrm{es}}}{\\rho_{\\mathrm{es}}}, \\qquad \\rho_{\\mathrm{es}} \\approx 0{,}917\\ \\mathrm{g\\,cm^{-3}}\\ (\\text{pada } 0\\ ^{\\circ}\\mathrm{C},\\ 101{,}325\\ \\mathrm{kPa})",
+    "variables": "V_es: volume padat es (cm3 = ml). m_es: massa es (g). ρ_es: massa jenis es Ih; 916,72 kg/m3 = 0,91672 g/cm3 pada titik leleh tekanan normal.",
+    "location_in_source": "Bagian 5 'Conclusion', hlm. 1038 (nilai 916,72 kg/m3); Bagian 3.1 'Density', hlm. 1027-1028 (definisi volume spesifik = kebalikan massa jenis; data 0 °C); Tabel 11, hlm. 1040 (massa jenis terhadap suhu); semua diperiksa visual",
+    "evidence_snippet": "[hlm. 1038] The density of ice at the normal pressure melting point is 916.72 kg m−3 with an estimated uncertainty of 0.01%, in excellent agreement with the value computed by Ginnings and Corruccini (1947). [hlm. 1027] Specific volume, ν, i.e., the reciprocal of density, ρ, is derived from the potential function, Eq. (1), by its pressure derivative, Eq. (4), as given in Table 3. [hlm. 1028] The densities 916.71(05) kg m−3 of Ginnings and Corruccini (1947) and 916.80(04) kg m−3 of Dantl and Gregora (1968) are considered the most accurate determinations at normal pressure and 0 °C.",
+    "url_opened": "https://www.teos-10.org/pubs/Feistel_and_Wagner_2006.pdf",
+    "notes": "Tabel 11 (hlm. 1040, kolom 101 325 Pa): 273 K 916,74; 270 K 917,18; 260 K 918,61; 250 K 920,00 kg/m3 - es freezer (sekitar -18 °C = 255 K) sekitar 0,919 g/cm3, selisih < 0,3% dari 0,917. Rumus hanya memberi volume padat es; rongga antarbalok es dan bagian es yang menyembul di atas cairan tidak dimodelkan oleh SPEC 6 (ice grams / 0,917) - nyatakan sebagai asumsi."
+   }
+  },
+  {
+   "id": "M02",
+   "group": "statistika",
+   "concept": "Interval kepercayaan bootstrap persentil",
+   "requested_form": "bootstrap percentile confidence interval",
+   "notes": "Sumber pool yang tepat, efron1994introduction (Efron & Tibshirani, An Introduction to the Bootstrap; rekaman Crossref cetakan Springer 1993 memuat bab 'Confidence intervals based on bootstrap percentiles', hlm. 168-177), tidak dapat dibuka: halaman bab Springer (10.1007/978-1-4899-4541-9_13) HTTP 404, versi CRC/Taylor & Francis berbayar, Google Books API kehabisan kuota. Sumber pool lain yang diperiksa tanpa hasil: efron1979bootstrap (tidak mendefinisikan interval persentil; lihat R04), james2021introduction (Bab 5.2 hanya galat baku bootstrap), rainio2024evaluation (tidak membahas bootstrap), hyndman2021forecasting (Bab 5.5 memakai persentil jalur sampel bootstrap untuk interval prediksi, bukan interval kepercayaan metrik: 'Then we can compute prediction intervals by calculating percentiles of the future sample paths for each forecast horizon. The result is called a bootstrapped prediction interval.'). Sumber di luar pool yang dibuka dan mendukung: DiCiccio & Efron (1996), Statistical Science 11(3):189-228, DOI 10.1214/ss/1032280214 - lihat candidate_sources 'diciccio1996bootstrap'. Status: TERKONFIRMASI OLEH SUMBER KANDIDAT; pindahkan ke confirmed setelah kandidat ditambahkan ke pool. Alternatif tanpa menambah sumber: jelaskan secara verbal ('batas bawah dan atas adalah persentil ke-2,5 dan ke-97,5 dari B replikasi bootstrap') dengan sitasi \\citep*{efron1994introduction} untuk konsep interval persentil (didukung judul bab di pool) dan tandai persamaan sebagai 'dirumuskan penulis'. Implementasi (pairing.bootstrap_ci): B = 2000, benih 42, pengambilan ulang per keranjang uji (kueri dari satu keranjang tetap bersama), persentil 100(α/2) dan 100(1 - α/2) dengan numpy.percentile, serta selisih berpasangan memakai keranjang hasil ambil ulang yang sama.",
+   "related": "F31",
+   "candidate_evidence": {
+    "candidate_key": "diciccio1996bootstrap",
+    "latex_if_added": "\\hat{G}(c) = \\frac{\\#\\{\\hat{\\theta}^{*}(b) < c\\}}{B}, \\qquad \\mathrm{IK}_{1-\\alpha} = \\left[\\hat{G}^{-1}\\!\\left(\\tfrac{\\alpha}{2}\\right),\\ \\hat{G}^{-1}\\!\\left(1-\\tfrac{\\alpha}{2}\\right)\\right]",
+    "variables": "θ̂*(b): statistik pada replikasi bootstrap ke-b (b = 1..B). Ĝ: fungsi distribusi kumulatif empiris replikasi bootstrap. Ĝ^{-1}(α): persentil ke-100 α. IK 95%: α = 0,05, yaitu persentil ke-2,5 dan ke-97,5.",
+    "location_in_source": "Bagian 2 'The BCa Intervals', Pers. (2.2) hlm. 192 dan paragraf pertama kolom kiri hlm. 193; diperiksa visual",
+    "evidence_snippet": "[hlm. 192] Let Ĝ(c) be the cumulative distribution function (c.d.f.) of B bootstrap replications θ̂*(b), (2.2) Ĝ(c) = #{θ̂*(b) < c}/B. [...] [hlm. 193] If a and z0 are zero, then θ̂_BCa[α] = Ĝ^{−1}(α), the 100αth percentile of the bootstrap replications. In this case the 0.90 BCa interval is the interval between the 5th and 95th percentiles of the bootstrap replications.",
+    "url_opened": "https://projecteuclid.org/journalArticle/Download?urlId=10.1214%2Fss%2F1032280214",
+    "notes": "Rumus interval dua sisi 1 - α adalah bentuk umum dari kalimat hlm. 193 (0,90 → persentil 5 dan 95); untuk 95% gunakan persentil 2,5 dan 97,5. Artikel juga membahas bahwa interval persentil kurang akurat dibanding BCa; laporkan sebagai keterbatasan."
+   }
+  }
+ ],
+ "candidate_sources": [
+  {
+   "proposed_key": "feistel2006new",
+   "for_formula": [
+    "M01 (F08)"
+   ],
+   "entry_type": "article",
+   "authors": [
+    "Feistel, Rainer",
+    "Wagner, Wolfgang"
+   ],
+   "author_count": 2,
+   "cite_if_added": "\\citep*{feistel2006new}",
+   "year": 2006,
+   "title": "A New Equation of State for H2O Ice Ih",
+   "venue": "Journal of Physical and Chemical Reference Data",
+   "volume": "35",
+   "number": "2",
+   "pages": "1021-1047",
+   "publisher": "AIP Publishing",
+   "doi": "10.1063/1.2183324",
+   "url": "https://doi.org/10.1063/1.2183324",
+   "peer_reviewed": true,
+   "crossref_check": "https://api.crossref.org/works/10.1063/1.2183324 (2026-09-30): title 'A New Equation of State for H2O Ice Ih'; authors Feistel, Rainer; Wagner, Wolfgang; container Journal of Physical and Chemical Reference Data; vol 35; issue 2; page 1021-1047; issued 2006-06-01; type journal-article; publisher AIP Publishing - semua cocok dengan PDF",
+   "opened_copy": "https://www.teos-10.org/pubs/Feistel_and_Wagner_2006.pdf (27 hlm., header 'J. Phys. Chem. Ref. Data, Vol. 35, No. 2, 2006'; dihosting situs resmi TEOS-10 IOC/SCOR/IAPSO)",
+   "abstract_evidence": "Menyajikan fungsi Gibbs untuk es Ih pada 0-273,16 K dan 0-210 MPa; kesimpulan (hlm. 1038): massa jenis es pada titik leleh tekanan normal 916,72 kg m^-3 dengan ketidakpastian 0,01%; Bagian 3.1: volume spesifik adalah kebalikan massa jenis; Tabel 11: massa jenis vs suhu (mis. 916,74 kg m^-3 pada 273 K, 101 325 Pa).",
+   "relevance": "Bab 2 subsec:penskalaan dan Bab 3 alg:penskalaan: dasar nilai rho_es = 0,917 g/ml untuk mengubah massa es menjadi volume pada kalkulator takaran (SPEC 6 pass C)."
+  },
+  {
+   "proposed_key": "diciccio1996bootstrap",
+   "for_formula": [
+    "M02 (F31)"
+   ],
+   "entry_type": "article",
+   "authors": [
+    "DiCiccio, Thomas J.",
+    "Efron, Bradley"
+   ],
+   "author_count": 2,
+   "cite_if_added": "\\citep*{diciccio1996bootstrap}",
+   "year": 1996,
+   "title": "Bootstrap confidence intervals",
+   "venue": "Statistical Science",
+   "volume": "11",
+   "number": "3",
+   "pages": "189-228",
+   "publisher": "Institute of Mathematical Statistics",
+   "doi": "10.1214/ss/1032280214",
+   "url": "https://doi.org/10.1214/ss/1032280214",
+   "peer_reviewed": true,
+   "crossref_check": "https://api.crossref.org/works/10.1214/ss/1032280214 (2026-09-30): title 'Bootstrap confidence intervals'; authors DiCiccio, Thomas J.; Efron, Bradley; container Statistical Science; vol 11; issue 3; issued 1996-09-01; type journal-article; publisher Institute of Mathematical Statistics; Crossref tidak memuat halaman - halaman 189-228 dari header PDF 'Statistical Science 1996, Vol. 11, No. 3, 189–228' (termasuk diskusi dan tanggapan)",
+   "opened_copy": "https://projecteuclid.org/journalArticle/Download?urlId=10.1214%2Fss%2F1032280214 (40 hlm., akses terbuka Project Euclid)",
+   "abstract_evidence": "Survei metode bootstrap untuk interval kepercayaan aproksimasi (BCa, bootstrap-t, ABC, kalibrasi); Pers. (2.2) mendefinisikan c.d.f. empiris B replikasi bootstrap dan hlm. 193 menyatakan bahwa bila a dan z0 nol, batas BCa adalah persentil ke-100 alpha replikasi bootstrap sehingga interval 0,90 adalah persentil ke-5 hingga ke-95.",
+   "relevance": "Bab 2 subsec:evaluasi-rekomendasi (bootstrap) dan Bab 3 sec:rancangan-eksperimen: rumus interval kepercayaan persentil 95% yang dipakai untuk HR@K, MRR@K, dan selisih berpasangan (H2)."
+  },
+  {
+   "proposed_key": "ge2010beyond",
+   "for_formula": [
+    "F21 (opsional; F21 sudah confirmed dengan definisi verbal dari pool)"
+   ],
+   "entry_type": "inproceedings",
+   "authors": [
+    "Ge, Mouzhi",
+    "Delgado-Battenfeld, Carla",
+    "Jannach, Dietmar"
+   ],
+   "author_count": 3,
+   "cite_if_added": "\\citep*{ge2010beyond}",
+   "year": 2010,
+   "title": "Beyond accuracy: Evaluating recommender systems by coverage and serendipity",
+   "venue": "Proceedings of the fourth ACM conference on Recommender systems (RecSys '10)",
+   "volume": null,
+   "number": null,
+   "pages": "257-260",
+   "publisher": "ACM",
+   "doi": "10.1145/1864708.1864761",
+   "url": "https://doi.org/10.1145/1864708.1864761",
+   "peer_reviewed": true,
+   "crossref_check": "https://api.crossref.org/works/10.1145/1864708.1864761 (2026-09-30): title 'Beyond accuracy' + subtitle 'evaluating recommender systems by coverage and serendipity'; authors Ge, Mouzhi; Delgado-Battenfeld, Carla; Jannach, Dietmar; container Proceedings of the fourth ACM conference on Recommender systems; page 257-260; issued 2010-09-26; type proceedings-article; publisher ACM",
+   "opened_copy": "https://dl.acm.org/doi/pdf/10.1145/1864708.1864761 (4 hlm.; dibuka lewat sesi peramban)",
+   "abstract_evidence": "Bagian 2 'Coverage' (hlm. 258) membedakan prediction coverage |I_p|/|I| dan catalog coverage; kutipan verbatim: 'We propose to measure catalog coverage as follows: Catalog coverage = |U_{j=1...N} I_L^j| / |I|', dengan I_L^j himpunan item pada daftar L rekomendasi ke-j selama periode pengukuran, N jumlah rekomendasi teramati, dan I seluruh item katalog.",
+   "relevance": "Bab 2 subsec:evaluasi-rekomendasi: rumus cakupan katalog yang tercetak (F21); melengkapi definisi verbal Zangerle & Bauer (2022) dan Latifi dkk. (2021)."
+  }
+ ]
+}

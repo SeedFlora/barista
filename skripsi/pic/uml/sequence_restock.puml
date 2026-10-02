@@ -1,0 +1,39 @@
+@startuml sequence_restock
+' Diagram sekuens GET /api/ai/restock (sumber: SPEC.md §7.3, §8; backend routers/ai.restock,
+'  ai/service.restock_plan & ingredient_demand_forecast, ai/repository.product_forecasts & product_bom,
+'  services/scaling.explode_to_ingredients, ai/restock.plan; frontend components/ai/RestockTab.vue)
+!include _style.iuml
+skinparam maxMessageSize 160
+skinparam ParticipantFontSize 11
+skinparam ArrowFontSize 11
+skinparam SequenceGroupHeaderFontSize 11
+skinparam NoteFontSize 10
+hide footbox
+
+actor "Pengguna" as U
+participant "SPA\nVue.js" as SPA
+participant "Router\nai" as R
+participant "Layanan AI\n(<i>restock</i>)" as SVC
+database "SQLite" as DB
+
+U -> SPA : buka tab Restock
+SPA -> R : GET /api/ai/restock
+R -> R : verifikasi JWT\n(gagal: 401)
+R -> SVC : restock_plan()
+SVC -> DB : model_runs terbaru\n(model, σ, z, R)
+alt model belum dilatih
+  SVC --> R : NotAvailableError
+  R --> SPA : 404 {detail}
+else model tersedia
+  SVC -> DB : prakiraan harian\ntiap produk
+  SVC -> SVC : BOM per unit produk\n(explode_to_ingredients\ndari layanan penskalaan)
+  SVC -> SVC : kebutuhan bahan\nD(t) = Σ prakiraan × BOM
+  SVC -> DB : bahan aktif terlacak\n(stok, L, kemasan)
+  loop tiap bahan
+    SVC -> SVC : D(L), D(L+R),\nSS = z·σ·√L,\nROP = D(L) + SS,\nS = D(L+R) + SS,\npesan = kemasan utuh\n≥ S − stok, status
+  end
+  SVC --> R : daftar terurut +\nbahan dikecualikan
+  R --> SPA : 200 OK {items,\nexcluded, notes}
+  SPA --> U : rekomendasi <i>restock</i>\nbeserta penjelasan
+end
+@enduml

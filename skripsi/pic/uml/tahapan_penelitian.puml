@@ -1,0 +1,36 @@
+@startuml tahapan_penelitian
+' Tahapan penelitian (sumber: arahan pembimbing - metodologi SDLC Agile/Scrum: analisis kebutuhan, perancangan,
+'  implementasi, pengujian; SPEC.md §7, §10, §11; tools/PANDUAN_PENULISAN.md §1 Bab 3 dan §5).
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+start
+:<b>1. Studi literatur dan analisis arahan</b>
+kajian pustaka terverifikasi; masalah, resep,
+dan SOP dari arahan pembimbing;
+:<b>2. Analisis kebutuhan</b>
+kebutuhan fungsional dan nonfungsional,
+peran pengguna, <i>product backlog</i>;
+:<b>3. Perancangan sistem dan algoritma</b>
+arsitektur, UML, ERD, peta situs, algoritma
+penskalaan, rancangan modul AI dan eksperimen;
+repeat
+  :<b>4. Iterasi Scrum (<i>sprint</i>)</b>
+  perencanaan <i>sprint</i> dari <i>product backlog</i>;
+  :Implementasi <i>backend</i> FastAPI,
+  <i>frontend</i> Vue.js, dan modul AI;
+  :Pengujian unit dan
+  tinjauan <i>sprint</i>;
+repeat while (<i>Product backlog</i>\nsudah selesai?) is (belum) not (sudah)
+:<b>5. Evaluasi algoritma pada <i>dataset</i></b>
+data sampel fiktif (IBM, Maven) dan data nyata
+(Bread Basket, ihelon, UC Davis/Cotter, dll.);
+:<b>6. Pengujian sistem</b>
+pengujian <i>black-box</i>, pengujian kinerja,
+dan <i>user acceptance testing</i> (SUS);
+:<b>7. Penulisan laporan</b>
+pembahasan, simpulan, dan saran;
+stop
+@enduml

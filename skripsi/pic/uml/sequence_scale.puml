@@ -1,0 +1,38 @@
+@startuml sequence_scale
+' Diagram sekuens POST /api/calculator/scale (sumber: SPEC.md §6, §8; backend routers/calculator.scale,
+'  security.get_current_user, services/scaling.scale_order/naive_scale/compute_scale)
+!include _style.iuml
+skinparam maxMessageSize 160
+skinparam ParticipantFontSize 11
+skinparam ArrowFontSize 11
+skinparam SequenceGroupHeaderFontSize 11
+skinparam NoteFontSize 10
+
+hide footbox
+
+actor "Pengguna" as U
+participant "SPA\nVue.js" as SPA
+participant "Router\ncalculator" as R
+participant "Layanan\npenskalaan" as SC
+database "SQLite" as DB
+
+U -> SPA : isi variasi pesanan
+SPA -> R : POST /api/calculator/scale\n{OrderSpec}, Bearer JWT
+R -> R : verifikasi JWT\n(get_current_user;\ngagal: 401)
+R -> SC : scale_order(spec)
+SC -> DB : muat resep\n& bahan
+DB --> SC : data resep
+SC -> SC : compute_scale():\nfaktor f, <i>pass</i> A–C,\npembulatan, BOM,\ncek batasan
+alt resep tidak ada / pesanan tidak valid
+  SC --> R : galat
+  R --> SPA : 404 / 422 {detail}
+else berhasil
+  SC --> R : ScaleResult
+  opt ?compare=naive
+    R -> SC : naive_scale(spec)
+    SC --> R : hasil linier
+  end
+  R --> SPA : 200 OK (takaran per\ncangkir, total, langkah,\nperingatan)
+  SPA --> U : tabel takaran\ndan peringatan
+end
+@enduml

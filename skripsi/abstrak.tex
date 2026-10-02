@@ -1,0 +1,56 @@
+\addcontentsline{toc}{section}{Abstract}
+\thispagestyle{plain}
+
+% Angka H1--H4: results/scaling_eval.json dan results/external/E1--E3*.json.
+% H5: results/assistant_eval.json (penilai versi 2.1); uji regresi internal.
+\edef\abstrakRightHyphenMin{\the\righthyphenmin}
+\righthyphenmin=3
+\hyphenation{FastAPI Vue-js FP-Growth ber-ba-sis re-ko-men-da-si pen-ska-la-an per-se-di-a-an}
+
+\begin{singlespace}
+{\centering
+    \textbf{UNIVERSITAS BINA NUSANTARA}\par
+    \vspace{0.18 cm}
+    Computer Science Study Program\par
+    School of Computer Science\par
+    Skripsi Sarjana Komputer\par
+    \vspace{0.2 cm}
+    \bo{\JudulIndo}\par
+    \vspace{0.1 cm}
+    \penulisSatu\ - \NIMpenulisSatu\par
+}
+
+{\centering\fontsize{16}{19}\selectfont\textbf{ABSTRACT}\par}
+
+\vspace{0.08 cm}
+
+{\centering\itshape\JudulInggris\par}
+
+\vspace{0.1 cm}
+
+{\itshape
+\noindent Coffee shops need consistent recipes, yet orders and stock are often calculated separately. Takar is a FastAPI and Vue.js application for recipes, SOPs, constraint-aware scaling, inventory, AI decisions, and a local retrieval-and-tool assistant. Fictitious samples guided development; real data supplied external checks; 60 internal questions assessed the assistant. In 525 orders, scaling yielded no fractional shots, cup overflow above 5\%, or ratio deviation above 0.2; raw linear scaling yielded 240 fractional shots and 267 overflows. FP-Growth did not reliably beat popularity on real Bread Basket data, nor did the selected forecaster beat seasonal naive on real ihelon drinks. Simulated forecast-based restocking reached a 0.9605 fill rate versus 0.7900 for static reorder points. After benchmark-guided routing, the full assistant scored 95.0\% versus 15.0\% closed-book, with 0\% versus 85.98\% unsupported numbers. Automated tests passed; user acceptance remains unmeasured. (\inisialPenulis)
+
+\vspace{0.2\baselineskip}
+
+\noindent\textbf{Keywords}: standardized recipe, recipe scaling, recommender system, demand forecasting, coffee shop
+}
+
+\clearpage
+\thispagestyle{plain}
+\phantomsection
+\addcontentsline{toc}{section}{Abstrak}
+
+{\centering\fontsize{16}{19}\selectfont\textbf{ABSTRAK}\par}
+
+\vspace{0.1 cm}
+
+\noindent Kedai kopi memerlukan resep konsisten, tetapi pesanan dan stok kerap dihitung terpisah. Takar adalah aplikasi FastAPI dan Vue.js untuk resep, SOP, penskalaan berbasis batasan, inventaris, keputusan AI, dan asisten lokal dengan pencarian serta alat. Data sampel fiktif mendukung pengembangan; data nyata dipakai sebagai pemeriksaan eksternal; 60 pertanyaan internal menilai asisten. Pada 525 pesanan, penskalaan tidak menghasilkan \textit{shot} pecahan, luapan di atas 5\%, atau penyimpangan rasio di atas 0,2; penskalaan linier mentah menghasilkan 240 \textit{shot} pecahan dan 267 luapan. FP-Growth tidak mengungguli popularitas secara meyakinkan pada Bread Basket nyata, begitu pula peramal terpilih terhadap \textit{seasonal naive} pada minuman ihelon nyata. Simulasi pemesanan ulang berbasis prakiraan mencapai \textit{fill rate} 0,9605 berbanding 0,7900 untuk titik pesan ulang statis. Setelah router diperbaiki memakai tolok ukur internal, akurasi asisten lengkap 95,0\% berbanding 15,0\% tanpa konteks, dengan angka tanpa dasar 0\% berbanding 85,98\%. Pengujian otomatis lulus; UAT belum dilakukan. (\inisialPenulis)
+
+\vspace{0.2\baselineskip}
+
+\noindent\textbf{Kata Kunci}: resep standar, penskalaan resep, sistem rekomendasi, peramalan permintaan, kedai kopi
+\end{singlespace}
+
+% Kembalikan nilai \righthyphenmin untuk bagian berikutnya.
+\righthyphenmin=\abstrakRightHyphenMin\relax

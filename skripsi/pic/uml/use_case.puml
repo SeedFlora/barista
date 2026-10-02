@@ -1,0 +1,88 @@
+@startuml use_case
+' Diagram use case Takar (sumber: SPEC.md §3 matriks peran, §8 REST API, §9 halaman; frontend/src/lib/permissions.js)
+' Generalisasi aktor: Manajer -> Head Barista -> Barista (hak akses bertingkat, SPEC §3).
+!include _style.iuml
+left to right direction
+skinparam nodesep 9
+skinparam ranksep 24
+skinparam UsecaseFontSize 11
+skinparam ActorFontStyle bold
+skinparam PackageFontSize 11
+skinparam ArrowFontSize 10
+
+package "Administrasi" as pAdm {
+  usecase "UC-22 Menonaktifkan resep" as UC22
+  usecase "UC-23 Mengelola pengguna" as UC23
+  usecase "UC-24 Melatih ulang\nmodel AI" as UC24
+  usecase "UC-25 Melihat data\npenjualan & model" as UC25
+}
+
+package "Operasional bar" as pOps {
+  usecase "UC-01 Masuk ke sistem" as UC01
+  usecase "UC-02 Melihat beranda" as UC02
+  usecase "UC-03 Melihat resep" as UC03
+  usecase "UC-05 Membandingkan\nskala linier" as UC05
+  usecase "UC-04 Menghitung\ntakaran pesanan" as UC04
+  usecase "UC-06 Mencatat produksi" as UC06
+  usecase "UC-07 Menjalankan\npanduan dan animasi seduh" as UC07
+  usecase "UC-08 Melihat SOP" as UC08
+  usecase "UC-09 Menjalankan\n<i>checklist</i> SOP" as UC09
+  usecase "UC-10 Melihat inventaris" as UC10
+}
+actor "Manajer" as M
+actor "Head Barista" as HB
+actor "Barista" as B
+
+package "Pengelolaan resep, SOP, dan stok" as pMan {
+  usecase "UC-16 Mengelola resep" as UC16
+  usecase "UC-17 Mengelola SOP" as UC17
+  usecase "UC-18 Mengelola\ndata bahan" as UC18
+  usecase "UC-19 Mencatat\npenerimaan stok" as UC19
+  usecase "UC-20 Melakukan\nstok opname" as UC20
+  usecase "UC-21 Mencatat\nbahan terbuang" as UC21
+}
+
+package "Rekomendasi AI" as pAi {
+  usecase "UC-11 Melihat\npasangan menu" as UC11
+  usecase "UC-12 Melihat\nprediksi permintaan" as UC12
+  usecase "UC-13 Melihat\nrekomendasi <i>restock</i>" as UC13
+  usecase "UC-14 Melihat model\n& evaluasi" as UC14
+  usecase "UC-15 Konsultasi\nasisten seduh" as UC15
+  usecase "UC-26 Bertanya kepada\nasisten AI lokal" as UC26
+}
+UC01 -- B
+UC02 -- B
+UC03 -- B
+UC04 -- B
+UC06 -- B
+UC07 -- B
+UC08 -- B
+UC09 -- B
+UC10 -- B
+UC22 -- M
+UC23 -- M
+UC24 -- M
+UC25 -- M
+
+B -- UC11
+B -- UC12
+B -- UC13
+B -- UC14
+B -- UC15
+B -- UC26
+HB -- UC16
+HB -- UC17
+HB -- UC18
+HB -- UC19
+HB -- UC20
+HB -- UC21
+
+HB -|> B
+' label kosong dua baris hanya untuk memberi jarak agar garis generalisasi Manajer -> Head Barista terlihat
+M -|> HB : " \n "
+
+' Label tengah pada relasi datar memberi jarak antar-elips sehingga garis putus-putus terlihat;
+' spasi em (U+2003) di belakang label menggeser teks ke kiri agar tidak tertimpa garis.
+UC04 <. UC05 : "<U+00AB>extend<U+00BB><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003>"
+UC06 .> UC04 : "<U+00AB>include<U+00BB><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003><U+2003>"
+@enduml

@@ -1,0 +1,39 @@
+@startuml sequence_pairing
+' Diagram sekuens GET /api/ai/pairing (sumber: SPEC.md §7.2, §8; backend routers/ai.pairing & _pairing_query,
+'  ai/service.resolve_recipe_key/pairing/key_catalog, ai/repository.load_recommender,
+'  ai/pairing.RuleRecommender.recommend; frontend components/calculator/PairingPanel.vue)
+!include _style.iuml
+skinparam maxMessageSize 160
+skinparam ParticipantFontSize 11
+skinparam ArrowFontSize 11
+skinparam SequenceGroupHeaderFontSize 11
+skinparam NoteFontSize 10
+hide footbox
+
+actor "Pengguna" as U
+participant "SPA\nVue.js" as SPA
+participant "Router\nai" as R
+participant "Layanan AI\n(pairing)" as SVC
+database "SQLite" as DB
+
+U -> SPA : pilih resep di\nKalkulator Takaran
+SPA -> R : GET /api/ai/pairing\n?recipe_id=..&k=5
+R -> R : verifikasi JWT,\ncek parameter\n(gagal: 401/422)
+opt recipe_id
+  R -> SVC : resolve_recipe_key()
+  SVC -> DB : resep & pair_key\nmenu aplikasi
+  SVC -> SVC : bila tidak ada: kunci\nproksi (peta produk)
+  SVC --> R : pair_key, proxy
+end
+R -> SVC : pairing(keys, k)
+SVC -> DB : model & aturan\nFP-Growth (IBM)
+alt model belum dilatih
+  SVC --> R : NotAvailableError
+  R --> SPA : 404 {detail}
+else model tersedia
+  SVC -> SVC : recommend():\naturan cocok,\nurut <i>confidence</i>\nlalu <i>lift</i>; sisa\nslot: popularitas
+  SVC --> R : saran + penjelasan
+  R --> SPA : 200 OK {suggestions,\nproxy}
+  SPA --> U : saran pasangan menu\n(+ catatan proksi)
+end
+@enduml

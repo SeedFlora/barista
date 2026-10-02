@@ -1,0 +1,22 @@
+# Repository publik berisi skripsi dan panduan sidang saja.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/skripsi/
+!/output/
+
+/output/*
+!/output/pdf/
+/output/pdf/*
+!/output/pdf/Panduan_Sidang_Takar.pdf
+
+# Berkas sementara dan cache di dalam sumber skripsi.
+/skripsi/tmp/
+/skripsi/__pycache__/
+/skripsi/**/__pycache__/
+/skripsi/.github/
+/skripsi/panduan/qa/
+*.pyc
+*.env
+.env

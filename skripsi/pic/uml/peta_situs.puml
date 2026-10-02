@@ -1,0 +1,82 @@
+@startwbs peta_situs
+' Peta situs SPA Takar menurut peran (sumber: SPEC.md §3 dan §9; frontend/src/router/index.js,
+'  lib/navigation.js, lib/permissions.js). Kelompok menu mengikuti sidebar: Di bar, Stok & AI, Pengelolaan.
+' Tab/dialog yang terbuka untuk semua peran ditulis miring di dalam simpul halaman; tab/dialog/aksi yang
+' hak aksesnya berbeda dari halamannya digambar sebagai simpul tersendiri.
+skinparam dpi 300
+<style>
+wbsDiagram {
+  node {
+    BackgroundColor #FFFFFF
+    LineColor #222222
+    FontName Arial
+    FontSize 11
+    FontColor #000000
+    RoundCorner 8
+    Padding 4
+    Margin 3
+  }
+  arrow {
+    LineColor #222222
+  }
+  :depth(0) {
+    BackgroundColor #E6E6E6
+    FontStyle bold
+  }
+  :depth(1) {
+    BackgroundColor #F2F2F2
+    FontStyle bold
+  }
+  .editor {
+    LineStyle 6-3
+  }
+  .manager {
+    LineThickness 2.5
+  }
+  .part {
+    FontStyle italic
+    RoundCorner 0
+  }
+  legend {
+    FontSize 11
+    BackgroundColor #FFFFFF
+    LineColor #555555
+  }
+}
+</style>
+* Masuk\n<size:9>/masuk</size>
+** Di bar
+*** Beranda\n<size:9>/</size>
+*** Resep\n<size:9>/resep</size>
+**** Detail Resep\n<size:9>/resep/:id</size>
+***** Ubah Resep\n<size:9>/resep/:id/ubah</size> <<editor>>
+***** Nonaktifkan\nresep <<part>> <<manager>>
+**** Resep Baru\n<size:9>/resep/baru</size> <<editor>>
+*** Kalkulator Takaran\n<size:9>/kalkulator</size>\n<i>bandingkan skala</i>\n<i>linier; dialog</i>\n<i>Catat Produksi</i>
+*** Panduan Seduh\n<size:9>/panduan-seduh</size>\n<i>tab Seduh terpandu,</i>\n<i>Timer shot espresso,</i>\n<i>animasi tahap resep</i>
+*** SOP\n<size:9>/sop</size>
+**** Detail SOP\n<size:9>/sop/:id</size>
+***** Checklist SOP\n<size:9>/sop/:id/checklist/:runId</size>
+***** Ubah SOP\n<size:9>/sop/:id/ubah</size> <<editor>>
+**** SOP Baru\n<size:9>/sop/baru</size> <<editor>>
+** Stok & AI
+*** Inventaris\n<size:9>/inventaris</size>\n<i>tabel stok,</i>\n<i>riwayat mutasi</i>
+**** Terima stok,\nstok opname,\nbahan terbuang <<part>> <<editor>>
+**** Tambah/ubah\nbahan <<part>> <<editor>>
+*** Rekomendasi AI\n<size:9>/rekomendasi-ai</size>\n<i>tab Restock,</i>\n<i>Prediksi Permintaan,</i>\n<i>Pasangan Menu,</i>\n<i>Model & Evaluasi</i>
+*** Asisten Seduh\n<size:9>/asisten-seduh</size>
+*** Asisten AI\n<size:9>/asisten-ai</size>\n<i>chat bersumber dan alat baca</i>
+** Pengelolaan <<manager>>
+*** Pengguna\n<size:9>/pengguna</size> <<manager>>
+*** Data & Model\n<size:9>/data-model</size>\n<i>status dataset,</i>\n<i>latih ulang</i>\n<i>model AI</i> <<manager>>
+
+legend right
+  <b>Hak akses</b> (garis tepi simpul): tunggal = semua peran (Manajer,
+  Head Barista, Barista); putus-putus = Manajer dan Head Barista;
+  tebal = Manajer. <i>Teks miring</i> = tab, dialog, atau aksi di dalam halaman.
+  <b>Tautan antarhalaman</b>: Detail Resep → Kalkulator Takaran dan
+  Panduan Seduh; Kalkulator Takaran → Panduan Seduh; Panduan Seduh →
+  Asisten Seduh; Pasangan Menu → Panduan Seduh; Detail SOP → Detail Resep;
+  Beranda → pintasan kerja.
+endlegend
+@endwbs

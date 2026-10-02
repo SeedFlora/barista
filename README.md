@@ -52,6 +52,8 @@ Set-Location barista
 
 Untuk kompilasi, ikuti [petunjuk LaTeX dan Docker](skripsi/README.md). Docker menyediakan lingkungan kompilasi; editor seperti VS Code tetap dapat dipakai untuk mengubah `.tex`.
 
+Untuk push berikutnya, gunakan akun GitHub yang mempunyai akses tulis. Git for Windows menyediakan Git Credential Manager untuk login HTTPS melalui browser dan menyimpan kredensial. Jika login belum tersedia di terminal, ikuti [panduan autentikasi GitHub](https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git).
+
 Urutan kerja setelah mengubah naskah:
 
 1. Ubah bagian yang sesuai pada `skripsi/`, lalu kompilasi ulang.

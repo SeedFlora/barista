@@ -1,0 +1,194 @@
+@startuml erd
+' ERD Takar: 19 tabel (sumber: backend/app/models.py)
+' Notasi crow's foot: || tepat satu, |o nol atau satu, }o nol atau banyak.
+' Tata letak kiri -> kanan dengan tiga kolom. Arah penulisan relasi hanya mengatur kolom
+' (tabel anak boleh berada di kiri induknya); kardinalitas di kedua ujung tetap sesuai FK di models.py.
+' Hanya kolom kunci (PK, FK, UQ) dan kolom utama yang ditampilkan; daftar kolom lengkap ada di kamus data.
+!include _style.iuml
+left to right direction
+hide circle
+hide methods
+hide stereotype
+skinparam ClassFontSize 11
+skinparam ClassAttributeFontSize 11
+skinparam ArrowFontSize 10
+skinparam nodesep 12
+skinparam ranksep 24
+
+' ---------------------------------------------------------------- kolom kiri
+entity "users" as users {
+  <b>id</b> : PK
+  --
+  email : UQ
+  name, role, is_active
+}
+entity "sop_documents" as sop_documents {
+  <b>id</b> : PK
+  --
+  code : UQ
+  recipe_id : FK
+  title, steps (JSON)
+}
+entity "categories" as categories {
+  <b>id</b> : PK
+  --
+  code : UQ
+  name
+}
+entity "recipe_sizes" as recipe_sizes {
+  <b>id</b> : PK
+  --
+  recipe_id : FK
+  code, serving, cup_ml
+  discrete_overrides
+}
+entity "recipe_steps" as recipe_steps {
+  <b>id</b> : PK
+  --
+  recipe_id : FK
+  step_no, time_mark_s
+  target_value, scale_target
+}
+entity "recipe_params" as recipe_params {
+  <b>id</b> : PK
+  --
+  recipe_id : FK
+  key, min_value, max_value
+}
+entity "model_runs" as model_runs {
+  <b>id</b> : PK
+  --
+  kind, dataset
+  params, metrics
+}
+entity "assistant_logs" as assistant_logs {
+  <b>id</b> : PK
+  --
+  user_id : FK
+  question, answer
+  mode, model, sources
+  tools, latency_ms
+}
+' ---------------------------------------------------------------- kolom tengah
+entity "sop_runs" as sop_runs {
+  <b>id</b> : PK
+  --
+  sop_id : FK
+  user_id : FK
+  checked_steps, completed
+}
+entity "recipes" as recipes {
+  <b>id</b> : PK
+  --
+  code : UQ
+  category_id : FK
+  updated_by : FK
+  base_size_code, brew_ratio
+  is_active, version
+}
+entity "ingredients" as ingredients {
+  <b>id</b> : PK
+  --
+  code : UQ
+  stock_qty, reorder_point
+  lead_time_days, pack_size
+}
+entity "pairing_rules" as pairing_rules {
+  <b>id</b> : PK
+  --
+  antecedent, consequent
+  support, confidence, lift
+}
+entity "sales_lines" as sales_lines {
+  <b>id</b> : PK
+  --
+  menu_item_id : FK
+  dataset, basket_id
+  sold_date, quantity
+}
+entity "forecasts" as forecasts {
+  <b>id</b> : PK
+  --
+  menu_item_id : FK
+  forecast_date, yhat
+  model
+}
+' ---------------------------------------------------------------- kolom kanan
+entity "inventory_movements" as inventory_movements {
+  <b>id</b> : PK
+  --
+  ingredient_id : FK
+  created_by : FK
+  movement_type, quantity
+  balance_after, reference
+}
+entity "brew_logs" as brew_logs {
+  <b>id</b> : PK
+  --
+  user_id : FK
+  recipe_id : FK
+  inputs, result
+}
+entity "production_logs" as production_logs {
+  <b>id</b> : PK
+  --
+  client_uuid : UQ
+  recipe_id : FK
+  created_by : FK
+  cups, result (JSON)
+}
+entity "recipe_components" as recipe_components {
+  <b>id</b> : PK
+  --
+  recipe_id : FK
+  ingredient_id : FK
+  sub_recipe_id : FK
+  ratio_ref_id : FK
+  quantity, unit
+  rule, rounding
+}
+entity "menu_items" as menu_items {
+  <b>id</b> : PK
+  --
+  code : UQ
+  recipe_id : FK
+  addon_ingredient_id : FK
+  pair_key, source
+}
+
+' kolom kiri -> kolom tengah
+users ||--o{ sop_runs
+users ||--o{ assistant_logs
+sop_documents ||--o{ sop_runs
+users |o--o{ recipes
+sop_documents }o--o| recipes
+recipe_sizes }o--|| recipes
+recipe_steps }o--|| recipes
+recipe_params }o--|| recipes
+categories ||--o{ recipes
+' penempatan saja (bukan relasi): model_runs berdiri sendiri, diletakkan di ruang kosong kanan bawah
+forecasts -[hidden]- model_runs
+' kolom kiri/tengah -> kolom kanan
+users |o--o{ inventory_movements
+users |o--o{ brew_logs
+users |o--o{ production_logs
+recipes |o--o{ brew_logs
+recipes ||--o{ production_logs
+recipes ||--o{ recipe_components
+recipes |o--o{ recipe_components
+recipes |o--o{ menu_items
+recipe_components }o--o| recipe_components
+ingredients ||--o{ inventory_movements
+ingredients |o--o{ recipe_components
+ingredients |o--o{ menu_items
+sales_lines }o--|| menu_items
+forecasts }o--|| menu_items
+' relasi logis tanpa FK: pairing_rules.antecedent/consequent berisi pair_key menu_items
+pairing_rules .. menu_items
+
+legend left
+  <b>Notasi</b> <i>crow's foot</i>: dua garis tegak = tepat satu; lingkaran dan garis tegak = nol atau satu;
+  lingkaran dan kaki gagak = nol atau banyak. PK = kunci primer, FK = kunci asing, UQ = unik.
+  Hanya kolom kunci dan kolom utama yang ditampilkan. Garis putus-putus: relasi logis melalui pair_key.
+endlegend
+@enduml

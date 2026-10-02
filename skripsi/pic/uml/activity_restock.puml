@@ -1,0 +1,48 @@
+@startuml activity_restock
+' Diagram aktivitas: melihat dan menindaklanjuti rekomendasi restock
+' (sumber: SPEC.md §3 matriks peran, §7.3 restock, §8 GET /ai/restock & POST /inventory/receive, §9;
+'  backend ai/service.restock_plan, ai/restock.plan; frontend RestockTab.vue, IngredientSheet.vue)
+' Prasyarat: model prakiraan sudah dilatih (bila belum, API mengembalikan 404 dan UI meminta pelatihan ulang).
+!include _style.iuml
+skinparam ActivityFontSize 11
+skinparam ActivityDiamondFontSize 11
+skinparam ArrowFontSize 10
+
+|Pengguna|
+start
+:Membuka tab Restock pada
+halaman Rekomendasi AI;
+|Sistem|
+:Menjabarkan prakiraan permintaan
+menu menjadi kebutuhan bahan
+harian (GET /api/ai/restock);
+:Menghitung D(L), SS, ROP, level S,
+jumlah pesan (kemasan utuh),
+status, dan hari persediaan;
+:Menampilkan rekomendasi terurut
+(kritis, perlu <i>restock</i>, aman)
+beserta penjelasan angkanya;
+|Pengguna|
+:Menyaring status dan
+meninjau penjelasan;
+if (Perlu memesan?) then (tidak)
+  stop
+else (ya)
+endif
+:Memesan ke pemasok
+(di luar sistem);
+if (Manajer atau
+head barista?) then (tidak)
+  :Meneruskan ke manajer
+  atau head barista;
+else (ya)
+  :Mencatat penerimaan
+  barang (Inventaris);
+  |Sistem|
+  :Mencatat mutasi penerimaan
+  dan memperbarui saldo stok
+  (POST /api/inventory/receive);
+endif
+|Pengguna|
+stop
+@enduml
