@@ -36,18 +36,36 @@ latexmk -pdf -halt-on-error -file-line-error Skripsi.tex
 
 ## Kompilasi dengan Docker
 
-Pasang dan jalankan Docker Desktop dengan Linux containers, lalu gunakan PowerShell dari akar repository:
+Dockerfile ada di [Dockerfile](Dockerfile), yaitu `skripsi/Dockerfile` dari akar repositori. Ia memuat paket LaTeX, sedangkan [tools/build-docker.sh](tools/build-docker.sh) menjalankan kompilasi di dalam container. Panduan instalasi, clone, build, buka PDF, dan troubleshooting dari nol ada pada [README utama](../README.md#replikasi-skripsi-dengan-docker-langkah-demi-langkah).
+
+Jalankan langkah berikut di PowerShell yang sama dari akar repositori:
+
+1. Buka Docker Desktop dalam mode Linux containers. Periksa `docker version` menampilkan Client dan Server.
+2. Periksa `Test-Path .\skripsi\Dockerfile` menghasilkan `True`.
+3. Bangun image:
+
+```powershell
+docker build --file .\skripsi\Dockerfile --tag barista-skripsi .\skripsi
+```
+
+4. Siapkan folder hasil dan jalankan container:
+
+```powershell
+New-Item -ItemType Directory -Force .\skripsi\build | Out-Null
+$skripsiOutputDir = (Resolve-Path .\skripsi\build).Path
+docker run --rm --mount "type=bind,source=$skripsiOutputDir,target=/output" barista-skripsi
+```
+
+5. Tunggu sampai kompilasi selesai tanpa error. Pada versi naskah 2 Oktober 2026, informasi PDF menunjukkan 148 halaman A4. Buka hasilnya:
+
+```powershell
+Start-Process .\skripsi\build\Skripsi.pdf
+```
+
+6. Setelah mengedit `.tex`, ulangi build dan run. Helper berikut dapat menggantikan langkah 3 dan 4:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\skripsi\tools\build.ps1 -Docker
-```
-
-Atau jalankan perintah manual:
-
-```powershell
-docker build -t barista-skripsi .\skripsi
-$outputDir = (Resolve-Path .\skripsi\build).Path
-docker run --rm --mount "type=bind,source=$outputDir,target=/output" barista-skripsi
 ```
 
 Hasil disalin ke `skripsi/build/Skripsi.pdf`; log tersedia di folder yang sama. Hanya folder output yang di-mount, sehingga sumber dalam image tetap tersedia. Build pertama mengunduh paket LaTeX dan memerlukan internet serta ruang disk. Edit sumber harus diikuti `docker build` lagi; lapisan paket akan memakai cache.
